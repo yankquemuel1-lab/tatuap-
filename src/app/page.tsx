@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { ARTIGOS_CULTURA } from '@/data/cultura'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Zap } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Zap, X } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const LABEL_CURTO: Record<string, string> = {
@@ -30,19 +31,129 @@ const CAT_ICON: Record<string, string> = {
   'construcao-coletiva': '🌱',
 }
 
+type TipoPopup = 'boas-vindas' | 'voltou' | null
+
 export default function HomePage() {
+  const router = useRouter()
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
+  const [popup, setPopup] = useState<TipoPopup>(null)
 
   useEffect(() => {
     getProgress().then(p => {
       setSementes(p.sementes)
       setCompletos(Object.values(p.dinamicas).filter(d => d.quizCompleto).length)
     })
+
+    // Mostra popup de boas-vindas (primeiro acesso) ou voltou (sessões seguintes)
+    const jaViuNessaSessao = sessionStorage.getItem('tatuape-popup-sessao')
+    if (!jaViuNessaSessao) {
+      sessionStorage.setItem('tatuape-popup-sessao', '1')
+      const primeiroAcesso = !localStorage.getItem('tatuape-boas-vindas-visto')
+      if (primeiroAcesso) {
+        localStorage.setItem('tatuape-boas-vindas-visto', '1')
+        setPopup('boas-vindas')
+      } else {
+        setPopup('voltou')
+      }
+    }
   }, [])
 
   return (
     <main className="pb-28" style={{ background: 'var(--bg)', minHeight: '100dvh' }}>
+
+      {/* Popup de boas-vindas / voltou */}
+      {popup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-5"
+          style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl p-6 flex flex-col items-center gap-5 text-center relative"
+            style={{
+              background: 'white',
+              boxShadow: '0 12px 48px rgba(226,113,90,0.22)',
+              animation: 'popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both',
+            }}
+          >
+            {/* Fechar */}
+            <button
+              onClick={() => setPopup(null)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full"
+              style={{ background: 'rgba(0,0,0,0.06)', color: '#666' }}
+              aria-label="Fechar"
+            >
+              <X size={16} />
+            </button>
+
+            {/* Avatar Apé */}
+            <div
+              className="w-24 h-24 rounded-full overflow-hidden border-4 shadow-lg"
+              style={{ borderColor: 'var(--primary)' }}
+            >
+              <Image
+                src="/tatu-risada.jpg"
+                alt="Apé"
+                width={96}
+                height={96}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+
+            {popup === 'boas-vindas' ? (
+              <>
+                <div className="flex gap-3 text-2xl">🎉 🌿 🥁</div>
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
+                    Seja muito bem-vindo ao{' '}
+                    <span style={{ color: 'var(--primary)' }}>Tatuapé App!</span>
+                  </h2>
+                  <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
+                    Você tá com tudo pra começar a brincar com o{' '}
+                    <strong style={{ color: 'var(--primary)' }}>Apé</strong>, nosso tatu
+                    canastra da cultura popular 🐾
+                  </p>
+                </div>
+                <Link
+                  href="/trilha"
+                  onClick={() => setPopup(null)}
+                  className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
+                  style={{ fontFamily: 'inherit' }}
+                >
+                  Iniciar a trilha agora! 🚀
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
+                    Que bom que você voltou! 🎊
+                  </h2>
+                  <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
+                    O <strong style={{ color: 'var(--primary)' }}>Apé</strong> tava com
+                    saudade! Pronto pra mais uma roda?
+                  </p>
+                </div>
+                <button
+                  onClick={() => setPopup(null)}
+                  className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
+                  style={{ fontFamily: 'inherit' }}
+                >
+                  Vamos brincar! 🥁
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.85) translateY(20px); }
+          to   { opacity: 1; transform: scale(1)    translateY(0); }
+        }
+      `}</style>
 
       {/* Header */}
       <header

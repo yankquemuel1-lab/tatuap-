@@ -41,7 +41,7 @@ export default function LoginPage() {
         password: senha,
         options: {
           data: { nome },
-          emailRedirectTo: `${window.location.origin}/confirmado`,
+          emailRedirectTo: `${window.location.origin}/`,
         },
       })
       if (error) {
