@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { ARTIGOS_CULTURA } from '@/data/cultura'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Zap, X } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Info, X } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const LABEL_CURTO: Record<string, string> = {
@@ -136,10 +136,10 @@ export default function HomePage() {
       >
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 shadow-sm"
           style={{ borderColor: 'var(--primary)' }}>
-          <Image src="/tatu-perfil.jpg" alt="Apé" width={40} height={40} className="w-full h-full object-cover" />
+          <Image src="/tatu-rosto.jpg" alt="Apé" width={40} height={40} className="w-full h-full object-cover" />
         </div>
         <h2 className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--primary)' }}>
-          Tatuapé
+          Tatuapé App
         </h2>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold"
           style={{ background: 'var(--green-bg)', color: 'var(--green)' }}>
@@ -169,10 +169,10 @@ export default function HomePage() {
       {/* Quick access */}
       <div className="flex gap-4 px-4 py-4 overflow-x-auto no-scrollbar">
         {[
+          { icon: <Info size={22} />, label: 'Conheça o App', color: 'var(--primary)', href: '/conheca-o-app' },
           { icon: <Lightbulb size={22} />, label: 'Dicas pra você', color: 'var(--green)', href: '/dicas' },
           { icon: <Megaphone size={22} />, label: 'Novidades', color: 'var(--blue)', href: '/novidades' },
-          { icon: <Heart size={22} />, label: 'Favoritos', color: 'var(--primary)', href: '/favoritos' },
-          { icon: <Zap size={22} />, label: 'Missões', color: '#7c3aed', href: '/missoes' },
+          { icon: <Heart size={22} />, label: 'Favoritos', color: '#e05a77', href: '/favoritos' },
         ].map((item) => (
           <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1.5 min-w-[72px]">
             <div className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md border-4 border-white"
@@ -304,8 +304,8 @@ export default function HomePage() {
             </Link>
           </div>
           <Image
-            src="/tatu-noite.jpg"
-            alt="Apé à noite"
+            src="/tatu-news.jpg"
+            alt="Apé newsletter"
             width={120}
             height={140}
             className="absolute right-0 bottom-0 object-cover object-top"

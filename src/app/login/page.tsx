@@ -93,11 +93,14 @@ export default function LoginPage() {
       <div className="flex flex-col items-center mb-8 z-10">
         <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg mb-4"
           style={{ background: 'var(--primary)' }}>
-          <Image src="/avatar-tatuape.jpg" alt="Tatuapé" width={96} height={96} className="w-full h-full object-cover" priority />
+          <Image src="/tatu-rosto.jpg" alt="Apé" width={96} height={96} className="w-full h-full object-cover" priority />
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight" style={{ color: 'var(--primary)' }}>
-          Tatuapé
+          Tatuapé App
         </h1>
+        <p className="text-sm text-center mt-2 leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
+          Explore as brincadeiras de roda com o Apé, nosso tatu canastra da cultura popular
+        </p>
       </div>
 
       <div className="w-full max-w-sm flex flex-col gap-6 z-10">
@@ -129,10 +132,10 @@ export default function LoginPage() {
 
         <div className="text-center">
           <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
-            {modo === 'login' ? 'Bem-vindo de volta!' : 'Crie sua conta'}
+            {modo === 'login' ? 'Acesse sua conta' : 'Crie sua conta'}
           </h2>
           <p className="text-sm mt-1.5" style={{ color: 'var(--text-muted)' }}>
-            {modo === 'login' ? 'Faça login para continuar sua trilha.' : 'É rápido e gratuito!'}
+            {modo === 'login' ? 'Digite seu e-mail e senha para entrar.' : 'É rápido e gratuito!'}
           </p>
         </div>
 
@@ -243,9 +246,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-xs" style={{ color: 'var(--text-muted)' }}>
-          Ao criar uma conta, você concorda com os nossos termos de uso.
-        </p>
       </div>
     </main>
   )
