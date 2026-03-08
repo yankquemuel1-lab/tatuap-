@@ -31,13 +31,11 @@ const CAT_ICON: Record<string, string> = {
   'construcao-coletiva': '🌱',
 }
 
-type TipoPopup = 'boas-vindas' | 'voltou' | null
-
 export default function HomePage() {
   const router = useRouter()
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
-  const [popup, setPopup] = useState<TipoPopup>(null)
+  const [popup, setPopup] = useState(false)
 
   useEffect(() => {
     getProgress().then(p => {
@@ -45,24 +43,17 @@ export default function HomePage() {
       setCompletos(Object.values(p.dinamicas).filter(d => d.quizCompleto).length)
     })
 
-    // Mostra popup de boas-vindas (primeiro acesso) ou voltou (sessões seguintes)
-    const jaViuNessaSessao = sessionStorage.getItem('tatuape-popup-sessao')
-    if (!jaViuNessaSessao) {
+    // Mostra popup uma vez por sessão (fecha ao navegar e voltar não reabre)
+    if (!sessionStorage.getItem('tatuape-popup-sessao')) {
       sessionStorage.setItem('tatuape-popup-sessao', '1')
-      const primeiroAcesso = !localStorage.getItem('tatuape-boas-vindas-visto')
-      if (primeiroAcesso) {
-        localStorage.setItem('tatuape-boas-vindas-visto', '1')
-        setPopup('boas-vindas')
-      } else {
-        setPopup('voltou')
-      }
+      setPopup(true)
     }
   }, [])
 
   return (
     <main className="pb-28" style={{ background: 'var(--bg)', minHeight: '100dvh' }}>
 
-      {/* Popup de boas-vindas / voltou */}
+      {/* Popup de boas-vindas */}
       {popup && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center px-5"
@@ -78,7 +69,7 @@ export default function HomePage() {
           >
             {/* Fechar */}
             <button
-              onClick={() => setPopup(null)}
+              onClick={() => setPopup(false)}
               className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full"
               style={{ background: 'rgba(0,0,0,0.06)', color: '#666' }}
               aria-label="Fechar"
@@ -101,49 +92,28 @@ export default function HomePage() {
               />
             </div>
 
-            {popup === 'boas-vindas' ? (
-              <>
-                <div className="flex gap-3 text-2xl">🎉 🌿 🥁</div>
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
-                    Seja muito bem-vindo ao{' '}
-                    <span style={{ color: 'var(--primary)' }}>Tatuapé App!</span>
-                  </h2>
-                  <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
-                    Você tá com tudo pra começar a brincar com o{' '}
-                    <strong style={{ color: 'var(--primary)' }}>Apé</strong>, nosso tatu
-                    canastra da cultura popular 🐾
-                  </p>
-                </div>
-                <Link
-                  href="/trilha"
-                  onClick={() => setPopup(null)}
-                  className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
-                  style={{ fontFamily: 'inherit' }}
-                >
-                  Iniciar a trilha agora! 🚀
-                </Link>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
-                    Que bom que você voltou! 🎊
-                  </h2>
-                  <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
-                    O <strong style={{ color: 'var(--primary)' }}>Apé</strong> tava com
-                    saudade! Pronto pra mais uma roda?
-                  </p>
-                </div>
-                <button
-                  onClick={() => setPopup(null)}
-                  className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
-                  style={{ fontFamily: 'inherit' }}
-                >
-                  Vamos brincar! 🥁
-                </button>
-              </>
-            )}
+            <div className="flex gap-3 text-2xl">🎉 🌿 🥁</div>
+
+            <div className="flex flex-col gap-2">
+              <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
+                Bem-vindo ao{' '}
+                <span style={{ color: 'var(--primary)' }}>Tatuapé App!</span>
+              </h2>
+              <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
+                Explore brincadeiras ancestrais com o{' '}
+                <strong style={{ color: 'var(--primary)' }}>Apé</strong>, nosso tatu
+                canastra da cultura popular 🐾
+              </p>
+            </div>
+
+            <Link
+              href="/trilha"
+              onClick={() => setPopup(false)}
+              className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
+              style={{ fontFamily: 'inherit' }}
+            >
+              Iniciar a trilha agora! 🚀
+            </Link>
           </div>
         </div>
       )}
