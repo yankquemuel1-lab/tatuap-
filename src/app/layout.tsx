@@ -1,0 +1,45 @@
+import type { Metadata, Viewport } from "next"
+import "./globals.css"
+
+export const metadata: Metadata = {
+  title: "Tatuapé — Brincadeiras da Cultura Popular",
+  description: "Explore danças, jogos e rodas da cultura popular afro-brasileira, indígena e europeia. Brincadeiras ancestrais para crianças e adultos.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Tatuapé",
+  },
+  openGraph: {
+    title: "Tatuapé — Brincadeiras da Cultura Popular",
+    description: "33 brincadeiras ancestrais para crianças e adultos",
+    type: "website",
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#e2715a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="pt-BR">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className="antialiased" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div className="min-h-screen max-w-[480px] mx-auto relative">
+          {children}
+        </div>
+      </body>
+    </html>
+  )
+}
