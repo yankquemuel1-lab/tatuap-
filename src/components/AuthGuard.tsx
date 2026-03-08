@@ -17,9 +17,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session && !isPublic) {
         router.replace('/login')
-      } else {
-        setVerificando(false)
       }
+      setVerificando(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
