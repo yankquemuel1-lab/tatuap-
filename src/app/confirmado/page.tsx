@@ -3,8 +3,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, CheckCircle } from 'lucide-react'
+import { useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export default function ConfirmadoPage() {
+  useEffect(() => {
+    supabase.auth.signOut()
+  }, [])
+
   return (
     <main
       className="relative flex flex-col items-center justify-center min-h-screen w-full px-5 py-8 overflow-hidden"
