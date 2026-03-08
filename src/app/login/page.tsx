@@ -39,7 +39,10 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signUp({
         email,
         password: senha,
-        options: { data: { nome } },
+        options: {
+          data: { nome },
+          emailRedirectTo: `${window.location.origin}/confirmado`,
+        },
       })
       if (error) {
         if (error.message.includes('already registered')) {
@@ -52,6 +55,9 @@ export default function LoginPage() {
       } else {
         setSucesso('Conta criada! Verifique seu e-mail para confirmar e depois faça login.')
         setModo('login')
+        setNome('')
+        setEmail('')
+        setSenha('')
       }
     }
     setCarregando(false)
