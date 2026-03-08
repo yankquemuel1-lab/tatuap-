@@ -3,7 +3,12 @@ import Image from 'next/image'
 import { ArrowLeft } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
-const SECOES = [
+type BlocoTexto = { tipo: 'texto'; conteudo: string }
+type BlocoDestaque = { tipo: 'destaque'; conteudo: string }
+type BlocoCards = { tipo: 'cards'; itens: { titulo: string; texto: string; emoji: string }[] }
+type Bloco = BlocoTexto | BlocoDestaque | BlocoCards
+
+const SECOES: { id: string; titulo: string; cor: string; emoji: string; blocos: Bloco[] }[] = [
   {
     id: 'a-roda',
     titulo: 'A roda é nossa forma mais antiga de sermos juntos',
