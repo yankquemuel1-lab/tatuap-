@@ -1,8 +1,7 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, CheckCircle } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 
 export default function ConfirmadoPage() {
 
@@ -34,20 +33,23 @@ export default function ConfirmadoPage() {
         {/* Text */}
         <div>
           <h1 className="text-3xl font-extrabold mb-2" style={{ color: 'var(--text)' }}>
-            E-mail confirmado!
+            Cadastro confirmado!
           </h1>
           <p className="text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-            Sua conta no <span className="font-bold" style={{ color: 'var(--primary)' }}>Tatuapé</span> está pronta. Agora é só entrar e começar a explorar as brincadeiras ancestrais com o Apé!
+            Sua conta no <span className="font-bold" style={{ color: 'var(--primary)' }}>Tatuapé</span> está pronta!
           </p>
         </div>
 
-        {/* CTA */}
-        <Link
-          href="/"
-          className="btn-primary w-full text-lg py-4 rounded-2xl flex items-center justify-center gap-2"
+        {/* Instruction box */}
+        <div
+          className="w-full rounded-2xl p-5 text-center"
+          style={{ background: 'white', border: '1.5px solid rgba(226,113,90,0.2)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
         >
-          Entrar no Tatuapé <ArrowRight size={20} />
-        </Link>
+          <p className="text-sm font-bold mb-1" style={{ color: 'var(--primary)' }}>Próximo passo</p>
+          <p className="text-base leading-relaxed" style={{ color: '#374151' }}>
+            Feche esta aba e retorne ao navegador onde você abriu o Tatuapé para fazer seu acesso.
+          </p>
+        </div>
 
         {/* Decorative emojis */}
         <div className="flex items-center gap-6 mt-2" style={{ opacity: 0.4 }}>
