@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
-import { getDinamicaProgress, marcarLeituraCompleta } from '@/lib/progress'
+import { getDinamicaProgress, marcarLeituraCompleta, type DinamicaProgress } from '@/lib/progress'
 import { ArrowLeft, Clock, Users, ChevronDown, ChevronUp, BookOpen, CheckCircle, ArrowRight, Heart } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 import { toggleFavorito, isFavorito } from '@/lib/favoritos'
@@ -37,13 +37,16 @@ export default function DinamicaPage() {
   const [leituraFeita, setLeituraFeita] = useState(false)
   const [showFacilitador, setShowFacilitador] = useState(false)
   const [favorito, setFavorito] = useState(false)
+  const [dp, setDp] = useState<DinamicaProgress>({ leituraCompleta: false, quizCompleto: false, quizPontuacao: 0, conquistas: [] })
 
   const din = DINAMICAS.find(d => d.id === id)
 
   useEffect(() => {
     if (!din) return
-    const dp = getDinamicaProgress(id)
-    setLeituraFeita(dp.leituraCompleta)
+    getDinamicaProgress(id).then(prog => {
+      setDp(prog)
+      setLeituraFeita(prog.leituraCompleta)
+    })
     setFavorito(isFavorito(id))
   }, [din, id])
 
@@ -63,16 +66,16 @@ export default function DinamicaPage() {
   }
 
   const cat = CATEGORIAS[din.categoria]
-  const dp = getDinamicaProgress(id)
   const icone = ICONES_DINAMICA[din.id] ?? '🌀'
   const gradiente = CAT_GRAD[din.categoria]
   const proxima = DINAMICAS.find(d => d.numero === din.numero + 1)
 
-  const handleLerHistoria = () => {
+  const handleLerHistoria = async () => {
     setFlipped(true)
     if (!leituraFeita) {
-      marcarLeituraCompleta(id)
+      await marcarLeituraCompleta(id)
       setLeituraFeita(true)
+      setDp(prev => ({ ...prev, leituraCompleta: true }))
     }
   }
 

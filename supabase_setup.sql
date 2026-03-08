@@ -9,6 +9,7 @@ create table public.profiles (
   nome text,
   email text,
   sementes integer default 0,
+  progresso jsonb default '{}',
   created_at timestamp with time zone default now()
 );
 

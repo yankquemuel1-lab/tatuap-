@@ -37,7 +37,7 @@ function TrilhaContent() {
   const [busca, setBusca] = useState('')
 
   useEffect(() => {
-    setProgress(getProgress())
+    getProgress().then(setProgress)
   }, [])
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { getProgress } from '@/lib/progress'
+import { getProgress, defaultProgress, type UserProgress } from '@/lib/progress'
 import { BottomNav } from '@/components/BottomNav'
 
 interface UserInfo {
@@ -27,8 +27,8 @@ export default function PerfilPage() {
   const [user, setUser] = useState<UserInfo | null>(null)
   const [carregando, setCarregando] = useState(true)
   const [saindo, setSaindo] = useState(false)
+  const [progresso, setProgresso] = useState<UserProgress>(defaultProgress())
 
-  const progresso = getProgress()
   const totalConcluidas = Object.values(progresso.dinamicas).filter(d => d.quizCompleto).length
 
   useEffect(() => {
@@ -41,6 +41,7 @@ export default function PerfilPage() {
       }
       setCarregando(false)
     })
+    getProgress().then(setProgresso)
   }, [])
 
   async function handleSair() {

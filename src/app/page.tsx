@@ -35,9 +35,10 @@ export default function HomePage() {
   const [completos, setCompletos] = useState(0)
 
   useEffect(() => {
-    const p = getProgress()
-    setSementes(p.sementes)
-    setCompletos(Object.values(p.dinamicas).filter(d => d.quizCompleto).length)
+    getProgress().then(p => {
+      setSementes(p.sementes)
+      setCompletos(Object.values(p.dinamicas).filter(d => d.quizCompleto).length)
+    })
   }, [])
 
   return (

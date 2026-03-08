@@ -33,8 +33,9 @@ export default function QuizPage() {
 
   useEffect(() => {
     if (!din) { router.replace('/trilha'); return }
-    const dp = getDinamicaProgress(id)
-    if (!dp.leituraCompleta) { router.replace(`/dinamica/${id}`); return }
+    getDinamicaProgress(id).then(dp => {
+      if (!dp.leituraCompleta) router.replace(`/dinamica/${id}`)
+    })
   }, [din, id, router])
 
   if (!din || perguntas.length === 0) return null
@@ -54,14 +55,14 @@ export default function QuizPage() {
     setEstado('feedback')
   }
 
-  const handleProximo = () => {
+  const handleProximo = async () => {
     if (atual < totalPerguntas - 1) {
       setAtual(a => a + 1)
       setSelecionada(null)
       setEstado('respondendo')
     } else {
       const total = respostas.filter(Boolean).length + (selecionada === pergunta.correta ? 1 : 0)
-      marcarQuizCompleto(id, total)
+      await marcarQuizCompleto(id, total)
       setEstado('resultado')
     }
   }
