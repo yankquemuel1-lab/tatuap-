@@ -71,12 +71,8 @@ export default function AberturaPage() {
           <span className="h-1.5 w-2 rounded-full" style={{ background: 'var(--primary)', opacity: 0.3 }} />
         </div>
 
-        <Link href="/" className="btn-primary w-full text-lg py-4 rounded-2xl">
+        <Link href="/login" className="btn-primary w-full text-lg py-4 rounded-2xl">
           Vamos Começar <ArrowRight size={20} />
-        </Link>
-
-        <Link href="/login" className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>
-          Já tenho uma conta
         </Link>
 
         {/* Bottom decorative icons */}

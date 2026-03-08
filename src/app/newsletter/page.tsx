@@ -56,7 +56,7 @@ export default function NewsletterPage() {
         >
           <div className="flex gap-4 items-start relative z-10">
             <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-white shadow-md">
-              <Image src="/avatar-tatuape.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
+              <Image src="/tatu-risada.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
               <p className="font-extrabold text-lg leading-tight">Fique por dentro!</p>

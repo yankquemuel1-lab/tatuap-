@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -238,11 +237,8 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Link de volta */}
-        <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          <Link href="/" className="font-bold" style={{ color: 'var(--primary)' }}>
-            Continuar sem conta →
-          </Link>
+        <p className="text-center text-xs" style={{ color: 'var(--text-muted)' }}>
+          Ao criar uma conta, você concorda com os nossos termos de uso.
         </p>
       </div>
     </main>

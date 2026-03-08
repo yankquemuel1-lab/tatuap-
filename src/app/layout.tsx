@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
+import { AuthGuard } from "@/components/AuthGuard"
 
 export const metadata: Metadata = {
   title: "Tatuapé — Brincadeiras da Cultura Popular",
@@ -37,7 +38,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
         <div className="min-h-screen max-w-[480px] mx-auto relative">
-          {children}
+          <AuthGuard>{children}</AuthGuard>
         </div>
       </body>
     </html>

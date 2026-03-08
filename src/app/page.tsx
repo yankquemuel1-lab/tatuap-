@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { ARTIGOS_CULTURA } from '@/data/cultura'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Zap } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const LABEL_CURTO: Record<string, string> = {
@@ -16,11 +16,11 @@ const LABEL_CURTO: Record<string, string> = {
   'construcao-coletiva': 'Rodas de Construção',
 }
 
-const CAT_CLASS: Record<string, string> = {
-  'dancas-musicas': 'cat-dancas',
-  'jogos-tradicao': 'cat-jogos',
-  'expressao-cura': 'cat-cura',
-  'construcao-coletiva': 'cat-construcao',
+const CAT_IMAGE: Record<string, string> = {
+  'dancas-musicas': '/dancas-de-roda.png',
+  'jogos-tradicao': '/jogos-de-roda.png',
+  'expressao-cura': '/rodas-de-cura.png',
+  'construcao-coletiva': '/rodas-de-construcao.png',
 }
 
 const CAT_ICON: Record<string, string> = {
@@ -54,7 +54,7 @@ export default function HomePage() {
       >
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 shadow-sm"
           style={{ borderColor: 'var(--primary)' }}>
-          <Image src="/avatar-tatuape.jpg" alt="Apé" width={40} height={40} className="w-full h-full object-cover" />
+          <Image src="/tatu-perfil.jpg" alt="Apé" width={40} height={40} className="w-full h-full object-cover" />
         </div>
         <h2 className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--primary)' }}>
           Tatuapé
@@ -71,7 +71,7 @@ export default function HomePage() {
           style={{ background: 'rgba(226,113,90,0.08)', border: '1px solid rgba(226,113,90,0.15)' }}>
           <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 shadow-md"
             style={{ borderColor: 'rgba(226,113,90,0.3)' }}>
-            <Image src="/avatar-tatuape.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
+            <Image src="/tatu-perfil.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: 'var(--primary)' }}>
@@ -84,12 +84,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick access — funcional */}
+      {/* Quick access */}
       <div className="flex gap-4 px-4 py-4 overflow-x-auto no-scrollbar">
         {[
           { icon: <Lightbulb size={22} />, label: 'Dicas pra você', color: 'var(--green)', href: '/dicas' },
           { icon: <Megaphone size={22} />, label: 'Novidades', color: 'var(--blue)', href: '/novidades' },
           { icon: <Heart size={22} />, label: 'Favoritos', color: 'var(--primary)', href: '/favoritos' },
+          { icon: <Zap size={22} />, label: 'Missões', color: '#7c3aed', href: '/missoes' },
         ].map((item) => (
           <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1.5 min-w-[72px]">
             <div className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-md border-4 border-white"
@@ -112,17 +113,26 @@ export default function HomePage() {
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          {Object.entries(CATEGORIAS).map(([key, cat]) => {
+          {Object.entries(CATEGORIAS).map(([key]) => {
             const count = DINAMICAS.filter(d => d.categoria === key).length
             return (
               <Link key={key} href={`/trilha?categoria=${key}`}
-                className={`${CAT_CLASS[key]} rounded-2xl p-4 flex flex-col justify-end aspect-square shadow-md relative overflow-hidden`}>
-                <div className="absolute inset-0 opacity-20" style={{ background: 'black' }} />
-                <div className="relative z-10 flex items-center gap-2">
-                  <span className="text-xl">{CAT_ICON[key]}</span>
-                  <p className="text-white font-bold text-sm leading-tight">{LABEL_CURTO[key]}</p>
+                className="rounded-2xl flex flex-col justify-end aspect-square shadow-md relative overflow-hidden">
+                <Image
+                  src={CAT_IMAGE[key]}
+                  alt={LABEL_CURTO[key]}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 480px) 50vw, 240px"
+                />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }} />
+                <div className="relative z-10 p-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{CAT_ICON[key]}</span>
+                    <p className="text-white font-bold text-sm leading-tight">{LABEL_CURTO[key]}</p>
+                  </div>
+                  <p className="text-white/70 text-xs mt-1">{count} brincadeiras</p>
                 </div>
-                <p className="relative z-10 text-white/70 text-xs mt-1">{count} brincadeiras</p>
               </Link>
             )
           })}
@@ -200,9 +210,9 @@ export default function HomePage() {
           <Mail size={18} style={{ color: 'var(--primary)' }} />
           <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Newsletter do Tatu</h2>
         </div>
-        <div className="rounded-2xl p-5 text-white relative overflow-hidden"
-          style={{ background: 'var(--primary)' }}>
-          <div className="relative z-10">
+        <div className="rounded-2xl text-white relative overflow-hidden"
+          style={{ background: 'var(--primary)', minHeight: 140 }}>
+          <div className="relative z-10 p-5 pr-32">
             <h3 className="text-xl font-extrabold mb-1">Fique por dentro!</h3>
             <p className="text-sm opacity-90 mb-4">Receba dicas de cultura e brincadeiras toda semana.</p>
             <Link href="/newsletter"
@@ -211,7 +221,14 @@ export default function HomePage() {
               Ir para Newsletter <ChevronRight size={14} />
             </Link>
           </div>
-          <Mail size={100} className="absolute -right-5 -bottom-5 opacity-10" />
+          <Image
+            src="/tatu-noite.jpg"
+            alt="Apé à noite"
+            width={120}
+            height={140}
+            className="absolute right-0 bottom-0 object-cover object-top"
+            style={{ height: '100%', width: 'auto', maxWidth: 130 }}
+          />
         </div>
       </section>
 
