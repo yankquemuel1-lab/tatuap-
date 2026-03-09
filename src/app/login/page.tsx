@@ -3,13 +3,11 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, User } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [modo, setModo] = useState<'login' | 'cadastro'>('login')
-  const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -22,43 +20,11 @@ export default function LoginPage() {
     setErro('')
     setSucesso('')
     setCarregando(true)
-
-    if (modo === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password: senha })
-      if (error) {
-        setErro('E-mail ou senha incorretos. Tente novamente.')
-      } else {
-        router.push('/')
-      }
+    const { error } = await supabase.auth.signInWithPassword({ email, password: senha })
+    if (error) {
+      setErro('E-mail ou senha incorretos. Tente novamente.')
     } else {
-      if (!nome.trim()) {
-        setErro('Informe seu nome para continuar.')
-        setCarregando(false)
-        return
-      }
-      const { error } = await supabase.auth.signUp({
-        email,
-        password: senha,
-        options: {
-          data: { nome },
-          emailRedirectTo: `${window.location.origin}/`,
-        },
-      })
-      if (error) {
-        if (error.message.includes('already registered')) {
-          setErro('Este e-mail já está cadastrado. Faça login.')
-        } else if (error.message.includes('Password')) {
-          setErro('A senha precisa ter pelo menos 6 caracteres.')
-        } else {
-          setErro('Erro ao criar conta. Tente novamente.')
-        }
-      } else {
-        setSucesso('Conta criada! Verifique seu e-mail para confirmar e depois faça login.')
-        setModo('login')
-        setNome('')
-        setEmail('')
-        setSenha('')
-      }
+      router.push('/')
     }
     setCarregando(false)
   }
@@ -104,62 +70,14 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-sm flex flex-col gap-6 z-10">
-        {/* Toggle */}
-        <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: 'rgba(226,113,90,0.2)' }}>
-          <button
-            onClick={() => { setModo('login'); setErro(''); setSucesso('') }}
-            className="flex-1 py-3 text-sm font-bold transition-all"
-            style={{
-              background: modo === 'login' ? 'var(--primary)' : 'white',
-              color: modo === 'login' ? 'white' : 'var(--text-muted)',
-              fontFamily: 'inherit',
-            }}
-          >
-            Entrar
-          </button>
-          <button
-            onClick={() => { setModo('cadastro'); setErro(''); setSucesso('') }}
-            className="flex-1 py-3 text-sm font-bold transition-all"
-            style={{
-              background: modo === 'cadastro' ? 'var(--primary)' : 'white',
-              color: modo === 'cadastro' ? 'white' : 'var(--text-muted)',
-              fontFamily: 'inherit',
-            }}
-          >
-            Criar conta
-          </button>
-        </div>
-
         <div className="text-center">
-          <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>
-            {modo === 'login' ? 'Acesse sua conta' : 'Crie sua conta'}
-          </h2>
+          <h2 className="text-2xl font-extrabold" style={{ color: 'var(--text)' }}>Acesse sua conta</h2>
           <p className="text-sm mt-1.5" style={{ color: 'var(--text-muted)' }}>
-            {modo === 'login' ? 'Digite seu e-mail e senha para entrar.' : 'É rápido e gratuito!'}
+            Digite seu e-mail e senha para entrar.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Nome (só no cadastro) */}
-          {modo === 'cadastro' && (
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-semibold px-1" style={{ color: 'var(--text)' }}>Nome</label>
-              <div className="relative">
-                <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--primary)', opacity: 0.6 }} />
-                <input
-                  type="text"
-                  placeholder="Seu nome"
-                  value={nome}
-                  onChange={e => setNome(e.target.value)}
-                  className="w-full h-14 pl-11 pr-4 rounded-xl text-sm outline-none"
-                  style={{ background: 'white', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
-                  onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
-                  onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
-                />
-              </div>
-            </div>
-          )}
-
           {/* Email */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-semibold px-1" style={{ color: 'var(--text)' }}>E-mail</label>
@@ -186,7 +104,7 @@ export default function LoginPage() {
               <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: 'var(--primary)', opacity: 0.6 }} />
               <input
                 type={showPassword ? 'text' : 'password'}
-                placeholder={modo === 'cadastro' ? 'Mínimo 6 caracteres' : 'Sua senha secreta'}
+                placeholder="Sua senha"
                 value={senha}
                 onChange={e => setSenha(e.target.value)}
                 required
@@ -207,18 +125,16 @@ export default function LoginPage() {
           </div>
 
           {/* Esqueci senha */}
-          {modo === 'login' && (
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={handleEsqueceuSenha}
-                className="text-sm font-semibold"
-                style={{ color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
-              >
-                Esqueci minha senha
-              </button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={handleEsqueceuSenha}
+              className="text-sm font-semibold"
+              style={{ color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              Esqueci minha senha
+            </button>
+          </div>
 
           {/* Mensagens */}
           {erro && (
@@ -241,11 +157,14 @@ export default function LoginPage() {
             className="btn-primary w-full text-base py-4 rounded-xl flex items-center justify-center gap-2"
             style={{ opacity: carregando ? 0.7 : 1, fontFamily: 'inherit' }}
           >
-            {carregando ? 'Aguarde...' : modo === 'login' ? 'Entrar' : 'Criar conta'}
+            {carregando ? 'Aguarde...' : 'Entrar'}
             {!carregando && <ArrowRight size={18} />}
           </button>
         </form>
 
+        <p className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
+          O acesso é liberado após a compra do Tatuapé App.
+        </p>
       </div>
     </main>
   )

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, Camera } from 'lucide-react'
+import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, Camera, KeyRound, Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getProgress, defaultProgress, type UserProgress } from '@/lib/progress'
 import { BottomNav } from '@/components/BottomNav'
@@ -42,6 +42,14 @@ export default function PerfilPage() {
   const [uploadandoFoto, setUploadandoFoto] = useState(false)
   const [erroFoto, setErroFoto] = useState('')
 
+  // Troca de senha
+  const [novaSenha, setNovaSenha] = useState('')
+  const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [showNovaSenha, setShowNovaSenha] = useState(false)
+  const [salvandoSenha, setSalvandoSenha] = useState(false)
+  const [erroSenha, setErroSenha] = useState('')
+  const [sucessoSenha, setSucessoSenha] = useState('')
+
   const totalConcluidas = Object.values(progresso.dinamicas).filter(d => d.quizCompleto).length
 
   useEffect(() => {
@@ -63,6 +71,29 @@ export default function PerfilPage() {
     setSaindo(true)
     await supabase.auth.signOut()
     router.push('/login')
+  }
+
+  async function trocarSenha() {
+    setErroSenha('')
+    setSucessoSenha('')
+    if (novaSenha.length < 6) {
+      setErroSenha('A senha precisa ter pelo menos 6 caracteres.')
+      return
+    }
+    if (novaSenha !== confirmarSenha) {
+      setErroSenha('As senhas não coincidem.')
+      return
+    }
+    setSalvandoSenha(true)
+    const { error } = await supabase.auth.updateUser({ password: novaSenha })
+    if (error) {
+      setErroSenha('Não foi possível trocar a senha. Tente novamente.')
+    } else {
+      setSucessoSenha('Senha alterada com sucesso!')
+      setNovaSenha('')
+      setConfirmarSenha('')
+    }
+    setSalvandoSenha(false)
   }
 
   async function salvarNome() {
@@ -286,6 +317,67 @@ export default function PerfilPage() {
             </div>
           )}
         </div>
+
+        {/* Trocar senha */}
+        {user && (
+          <div className="rounded-2xl bg-white p-4" style={{ boxShadow: 'var(--shadow)', border: '1px solid rgba(0,0,0,0.05)' }}>
+            <div className="flex items-center gap-2 mb-3">
+              <KeyRound size={18} style={{ color: 'var(--primary)' }} />
+              <h2 className="font-extrabold text-base" style={{ color: 'var(--text)' }}>Trocar senha</h2>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="relative">
+                <input
+                  type={showNovaSenha ? 'text' : 'password'}
+                  placeholder="Nova senha (mín. 6 caracteres)"
+                  value={novaSenha}
+                  onChange={e => setNovaSenha(e.target.value)}
+                  className="w-full h-12 pl-4 pr-11 rounded-xl text-sm outline-none"
+                  style={{ background: 'var(--bg)', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
+                  onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
+                  onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNovaSenha(!showNovaSenha)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--primary)', opacity: 0.6 }}
+                >
+                  {showNovaSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <input
+                type="password"
+                placeholder="Confirmar nova senha"
+                value={confirmarSenha}
+                onChange={e => setConfirmarSenha(e.target.value)}
+                className="w-full h-12 pl-4 pr-4 rounded-xl text-sm outline-none"
+                style={{ background: 'var(--bg)', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
+                onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
+                onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
+              />
+              {erroSenha && (
+                <p className="text-xs font-medium px-1" style={{ color: '#c0392b' }}>{erroSenha}</p>
+              )}
+              {sucessoSenha && (
+                <p className="text-xs font-medium px-1" style={{ color: '#2d6a4f' }}>{sucessoSenha}</p>
+              )}
+              <button
+                onClick={trocarSenha}
+                disabled={salvandoSenha || !novaSenha || !confirmarSenha}
+                className="w-full py-3 rounded-xl font-bold text-sm"
+                style={{
+                  background: 'var(--primary)',
+                  color: 'white',
+                  fontFamily: 'inherit',
+                  opacity: (salvandoSenha || !novaSenha || !confirmarSenha) ? 0.5 : 1,
+                }}
+              >
+                {salvandoSenha ? 'Salvando...' : 'Salvar nova senha'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Botão sair */}
         {user && (
