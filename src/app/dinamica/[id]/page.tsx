@@ -120,34 +120,47 @@ export default function DinamicaPage() {
 
       <div className="px-4 pt-4 max-w-lg mx-auto">
 
-        {/* Hero banner */}
-        <div
-          className="rounded-2xl overflow-hidden mb-4 relative h-40 flex items-center justify-center shadow-md"
-          style={{ background: gradiente }}
-        >
-          <span className="text-7xl drop-shadow-lg">{icone}</span>
-          <div className="absolute bottom-3 left-4 right-4">
-            <p className="text-white font-extrabold text-xl leading-tight drop-shadow">{din.nome}</p>
-            <p className="text-white/80 text-xs mt-0.5 italic">{din.origem}</p>
-          </div>
+        {/* Hero image */}
+        <div className="rounded-2xl overflow-hidden mb-4 relative shadow-md" style={{ height: 160 }}>
+          <Image
+            src={`/brincadeiras/${din.id}.png`}
+            alt={din.nome}
+            fill
+            className="object-cover"
+            sizes="(max-width: 480px) 100vw, 480px"
+            priority
+          />
         </div>
 
-        {/* Meta chips */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {[
-            { icon: <Clock size={12} />, text: `${din.tempoMin}-${din.tempoMax} min` },
-            { icon: <Users size={12} />, text: `${din.pessoasMin}${din.pessoasMax >= 999 ? '+' : `-${din.pessoasMax}`} pessoas` },
-            { icon: <span className="text-xs">🎂</span>, text: `${din.idadeMin}+ anos` },
-            { icon: <span className="text-xs">🛠️</span>, text: din.material },
-          ].map((item, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background: `${cat.cor}12`, color: 'var(--text)', border: `1px solid ${cat.cor}25` }}
-            >
-              {item.icon} {item.text}
-            </span>
-          ))}
+        {/* Nome + contexto histórico + meta chips */}
+        <div className="mb-4">
+          <h2 className="text-xl font-extrabold mb-0.5" style={{ color: 'var(--text)' }}>{din.nome}</h2>
+          <p className="text-xs italic mb-3" style={{ color: 'var(--text-muted)' }}>{din.origem}</p>
+          <div className="rounded-xl p-3.5 mb-3"
+            style={{ background: `${cat.cor}10`, border: `1px solid ${cat.cor}25` }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: cat.cor }}>
+              ⚡ Contexto Histórico Cultural
+            </p>
+            <p className="text-sm italic leading-relaxed" style={{ color: 'var(--text)' }}>
+              &ldquo;{din.tecnologiaAncestral}&rdquo;
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { icon: <Clock size={12} />, text: `${din.tempoMin}-${din.tempoMax} min` },
+              { icon: <Users size={12} />, text: `${din.pessoasMin}${din.pessoasMax >= 999 ? '+' : `-${din.pessoasMax}`} pessoas` },
+              { icon: <span className="text-xs">🎂</span>, text: `${din.idadeMin}+ anos` },
+              { icon: <span className="text-xs">🛠️</span>, text: din.material },
+            ].map((item, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+                style={{ background: `${cat.cor}12`, color: 'var(--text)', border: `1px solid ${cat.cor}25` }}
+              >
+                {item.icon} {item.text}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Flip Card */}
@@ -191,19 +204,6 @@ export default function DinamicaPage() {
                       </span>
                     ))}
                   </div>
-                </div>
-
-                {/* Tecnologia ancestral */}
-                <div
-                  className="rounded-xl p-3.5 mb-4"
-                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.07)' }}
-                >
-                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
-                    ⚡ Tecnologia Ancestral
-                  </p>
-                  <p className="text-sm italic leading-relaxed" style={{ color: 'var(--text)' }}>
-                    &ldquo;{din.tecnologiaAncestral}&rdquo;
-                  </p>
                 </div>
 
                 <button

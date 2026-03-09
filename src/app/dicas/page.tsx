@@ -172,7 +172,7 @@ export default function DicasPage() {
             <Image src="/tatu-risada.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
           </div>
           <div>
-            <p className="text-white font-extrabold text-base leading-tight">Aproveite ao máximo o Tatuapé</p>
+            <p className="text-white font-extrabold text-base leading-tight">Aproveite ao Máximo</p>
             <p className="text-white/80 text-sm mt-0.5">Dicas, reflexões e orientações do Apé pra você</p>
           </div>
         </div>

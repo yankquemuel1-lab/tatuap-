@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { ARTIGOS_CULTURA } from '@/data/cultura'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Info, X } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Compass, X } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const LABEL_CURTO: Record<string, string> = {
@@ -106,14 +106,13 @@ export default function HomePage() {
               </p>
             </div>
 
-            <Link
-              href="/trilha"
+            <button
               onClick={() => setPopup(false)}
               className="btn-primary w-full text-base py-4 rounded-2xl flex items-center justify-center gap-2 font-bold"
               style={{ fontFamily: 'inherit' }}
             >
               Iniciar a trilha agora! 🚀
-            </Link>
+            </button>
           </div>
         </div>
       )}
@@ -169,7 +168,7 @@ export default function HomePage() {
       {/* Quick access */}
       <div className="flex gap-4 px-4 py-4 overflow-x-auto no-scrollbar">
         {[
-          { icon: <Info size={22} />, label: 'Conheça o App', color: 'var(--primary)', href: '/conheca-o-app' },
+          { icon: <Compass size={22} />, label: 'Conheça o App', color: 'var(--primary)', href: '/conheca-o-app' },
           { icon: <Lightbulb size={22} />, label: 'Dicas pra você', color: 'var(--green)', href: '/dicas' },
           { icon: <Megaphone size={22} />, label: 'Novidades', color: 'var(--blue)', href: '/novidades' },
           { icon: <Heart size={22} />, label: 'Favoritos', color: '#e05a77', href: '/favoritos' },

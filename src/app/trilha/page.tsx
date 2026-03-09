@@ -9,6 +9,19 @@ import { getProgress, type UserProgress } from '@/lib/progress'
 import { ArrowLeft, Search, Zap, Users, CheckCircle } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
+function truncarTexto(texto: string, max = 62): string {
+  if (texto.length <= max) return texto + '...'
+  let cortado = texto.slice(0, max)
+  const ultimoEspaco = cortado.lastIndexOf(' ')
+  if (ultimoEspaco > max * 0.6) cortado = cortado.slice(0, ultimoEspaco)
+  const palavras = cortado.trimEnd().split(' ')
+  if (palavras[palavras.length - 1].length <= 2 && palavras.length > 1) {
+    palavras.pop()
+    cortado = palavras.join(' ')
+  }
+  return cortado.trimEnd() + '...'
+}
+
 const LABEL_CURTO: Record<string, string> = {
   'dancas-musicas': 'Danças de Roda',
   'jogos-tradicao': 'Jogos de Roda',
@@ -201,9 +214,15 @@ function TrilhaContent() {
               className="flex flex-col rounded-2xl overflow-hidden shadow-sm relative"
               style={{ border: '1px solid rgba(0,0,0,0.06)', background: 'white' }}
             >
-              {/* Image / gradient area */}
-              <div className={`${gradClass} h-32 relative flex items-center justify-center`}>
-                <span className="text-5xl drop-shadow-md">{icone}</span>
+              {/* Brincadeira image */}
+              <div className="h-32 relative overflow-hidden">
+                <Image
+                  src={`/brincadeiras/${din.id}.png`}
+                  alt={din.nome}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 480px) 50vw, 240px"
+                />
                 {status === 'completo' && (
                   <div
                     className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
@@ -228,16 +247,16 @@ function TrilhaContent() {
                   {din.nome}
                 </h4>
                 <p className="text-xs italic mb-2" style={{ color: 'var(--text-muted)' }}>
-                  &ldquo;{din.tecnologiaAncestral.slice(0, 50)}&rdquo;
+                  &ldquo;{truncarTexto(din.tecnologiaAncestral)}&rdquo;
                 </p>
                 <div className="mt-auto flex gap-1.5 flex-wrap">
-                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(0,0,0,0.05)', color: 'var(--text-muted)' }}>
-                    <Zap size={10} /> {din.tempoMin}min
+                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-semibold"
+                    style={{ background: '#fef9c3', color: '#a16207' }}>
+                    <Zap size={10} style={{ color: '#eab308' }} /> {din.tempoMin}min
                   </span>
-                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(0,0,0,0.05)', color: 'var(--text-muted)' }}>
-                    <Users size={10} /> {din.pessoasMin}+
+                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-semibold"
+                    style={{ background: '#dcfce7', color: '#166534' }}>
+                    <Users size={10} style={{ color: '#22c55e' }} /> {din.pessoasMin}+
                   </span>
                 </div>
               </div>

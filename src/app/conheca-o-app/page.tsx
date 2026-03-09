@@ -186,27 +186,6 @@ export default function ConhecaOAppPage() {
           </div>
         </section>
 
-        {/* Como usar as dinâmicas */}
-        <section>
-          <h2 className="text-lg font-extrabold mb-1" style={{ color: 'var(--text)' }}>
-            🎭 Como usar as dinâmicas
-          </h2>
-          <p className="text-sm mb-3" style={{ color: 'var(--text-muted)' }}>
-            Dicas para facilitar as brincadeiras com seu grupo.
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            {COMO_USAR.map((item) => (
-              <div key={item.titulo}
-                className="p-4 rounded-2xl bg-white flex flex-col gap-2"
-                style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}>
-                <span className="text-2xl">{item.emoji}</span>
-                <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>{item.titulo}</p>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{item.texto}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Sumário */}
         <section>
           <h2 className="text-lg font-extrabold mb-3" style={{ color: 'var(--text)' }}>
