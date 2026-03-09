@@ -18,10 +18,10 @@ const LABEL_CURTO: Record<string, string> = {
 }
 
 const CAT_IMAGE: Record<string, string> = {
-  'dancas-musicas': '/dancas-de-roda.png',
-  'jogos-tradicao': '/jogos-de-roda.png',
-  'expressao-cura': '/rodas-de-cura.png',
-  'construcao-coletiva': '/rodas-de-construcao.png',
+  'dancas-musicas': '/dancas-de-roda-02.jpg',
+  'jogos-tradicao': '/jogos-de-roda-02.jpg',
+  'expressao-cura': '/rodas-de-cura-02.jpg',
+  'construcao-coletiva': '/rodas-de-construcao-02.jpg',
 }
 
 const CAT_ICON: Record<string, string> = {

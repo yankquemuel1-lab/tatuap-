@@ -139,7 +139,7 @@ export default function DinamicaPage() {
           <div className="rounded-xl p-3.5 mb-3"
             style={{ background: `${cat.cor}10`, border: `1px solid ${cat.cor}25` }}>
             <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: cat.cor }}>
-              ⚡ Contexto Histórico Cultural
+              ⚡ {din.nome} em uma frase...
             </p>
             <p className="text-sm italic leading-relaxed" style={{ color: 'var(--text)' }}>
               &ldquo;{din.tecnologiaAncestral}&rdquo;
@@ -213,6 +213,11 @@ export default function DinamicaPage() {
                 >
                   <BookOpen size={17} /> Raízes Ancestrais
                 </button>
+                <div className="mt-3 rounded-xl px-3.5 py-2.5 text-center" style={{ background: `${cat.cor}10`, border: `1px solid ${cat.cor}25` }}>
+                  <p className="text-sm font-semibold italic" style={{ color: cat.cor }}>
+                    Conheça o contexto histórico cultural d{/^[aeiouAEIOU]/.test(din.nome) ? 'a' : 'o'} {din.nome} 👆
+                  </p>
+                </div>
               </div>
             </div>
 
