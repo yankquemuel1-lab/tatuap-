@@ -6,14 +6,15 @@ const SENHA_TEMPORARIA = 'mudesuasenha123'
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. Validar o hottok da Hotmart
-    const hottok = request.nextUrl.searchParams.get('hottok')
+    // 1. Ler o payload da Hotmart
+    const body = await request.json()
+
+    // 2. Validar o hottok — no v2.0.0 ele vem dentro do body
+    const hottok = body?.hottok
     if (hottok !== process.env.HOTMART_HOTTOK) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    // 2. Ler o payload da Hotmart
-    const body = await request.json()
     const evento = body?.event
 
     // Só processa compras aprovadas
