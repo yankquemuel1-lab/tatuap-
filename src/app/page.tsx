@@ -33,6 +33,18 @@ export default function HomePage() {
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
   const [popup, setPopup] = useState(false)
+  const [girando, setGirando] = useState(false)
+  const [resultadoSorteio, setResultadoSorteio] = useState<typeof DINAMICAS[0] | null>(null)
+
+  function girar() {
+    setGirando(true)
+    setResultadoSorteio(null)
+    setTimeout(() => {
+      const idx = Math.floor(Math.random() * DINAMICAS.length)
+      setResultadoSorteio(DINAMICAS[idx])
+      setGirando(false)
+    }, 1200)
+  }
 
   useEffect(() => {
     getProgress().then(p => {
@@ -212,6 +224,57 @@ export default function HomePage() {
               </Link>
             )
           })}
+        </div>
+      </section>
+
+      {/* Sorteio da Roda */}
+      <section className="px-4 pt-5 pb-2">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">🎲</span>
+          <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Sorteio da Roda</h2>
+        </div>
+        <div className="rounded-2xl p-5 text-white text-center"
+          style={{ background: 'linear-gradient(135deg, #1a1a5e 0%, #3a2060 100%)', boxShadow: '0 4px 24px rgba(26,26,94,0.25)' }}>
+
+          {/* avatar do Apé */}
+          <div className={`w-20 h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto mb-4 shadow-lg ${girando ? 'animate-spin' : ''}`}>
+            <Image src="/tatu-rosto.jpg" alt="Apé" width={80} height={80} className="w-full h-full object-cover" />
+          </div>
+
+          {!resultadoSorteio && !girando && (
+            <>
+              <p className="font-bold text-base mb-1">Deixa o Apé escolher!</p>
+              <p className="text-white/65 text-xs mb-4">Não sabe qual brincadeira fazer hoje? Gira a roda!</p>
+              <button onClick={girar} className="py-2.5 px-6 rounded-full font-bold text-sm"
+                style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)' }}>
+                Girar a Roda! 🎲
+              </button>
+            </>
+          )}
+
+          {girando && (
+            <p className="font-bold text-base">A roda está girando...</p>
+          )}
+
+          {resultadoSorteio && !girando && (
+            <>
+              <p className="text-white/70 text-xs mb-1 uppercase tracking-wider">A brincadeira de hoje é</p>
+              <p className="text-2xl font-extrabold mb-0.5">{resultadoSorteio.nome}</p>
+              <p className="text-white/60 text-xs mb-4">{resultadoSorteio.origem}</p>
+              <div className="flex gap-2 justify-center">
+                <Link href={`/dinamica/${resultadoSorteio.id}`}
+                  className="py-2.5 px-5 rounded-full font-bold text-sm"
+                  style={{ background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.3)' }}>
+                  Vamos Brincar! 🎉
+                </Link>
+                <button onClick={girar}
+                  className="py-2.5 px-4 rounded-full text-sm font-bold"
+                  style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                  🎲
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

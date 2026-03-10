@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { getDinamicaProgress, marcarLeituraCompleta, type DinamicaProgress } from '@/lib/progress'
-import { ArrowLeft, Clock, Users, ChevronDown, ChevronUp, BookOpen, CheckCircle, ArrowRight, Heart } from 'lucide-react'
+import { ArrowLeft, Clock, Users, BookOpen, CheckCircle, ArrowRight, Heart } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 import { toggleFavorito, isFavorito } from '@/lib/favoritos'
 
@@ -44,7 +44,6 @@ export default function DinamicaPage() {
   const id = params.id as string
   const [flipped, setFlipped] = useState(false)
   const [leituraFeita, setLeituraFeita] = useState(false)
-  const [showFacilitador, setShowFacilitador] = useState(false)
   const [favorito, setFavorito] = useState(false)
   const [dp, setDp] = useState<DinamicaProgress>({ leituraCompleta: false, quizCompleto: false, quizPontuacao: 0, conquistas: [] })
 
@@ -318,31 +317,22 @@ export default function DinamicaPage() {
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text)' }}>{din.variacao}</p>
         </div>
 
-        {/* Dica do Facilitador */}
-        <button
-          onClick={() => setShowFacilitador(!showFacilitador)}
-          className="w-full text-left rounded-2xl p-4 mb-4 transition-all"
-          style={{
-            background: showFacilitador ? 'var(--green-bg)' : 'white',
-            border: `1.5px solid ${showFacilitador ? 'var(--green)' : 'rgba(0,0,0,0.08)'}`,
-            boxShadow: 'var(--shadow)',
-          }}
-        >
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-bold" style={{ color: 'var(--green)' }}>
-              🌿 Dica do Facilitador
-            </p>
-            {showFacilitador
-              ? <ChevronUp size={18} style={{ color: 'var(--green)' }} />
-              : <ChevronDown size={18} style={{ color: 'var(--text-light)' }} />
-            }
+        {/* Dica do Facilitador — Balão do Apé */}
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2 shadow-sm mt-1"
+            style={{ borderColor: 'var(--green)' }}>
+            <Image src="/tatu-perfil.jpg" alt="Apé" width={44} height={44} className="w-full h-full object-cover" />
           </div>
-          {showFacilitador && (
-            <p className="text-sm mt-2 leading-relaxed animate-fadein" style={{ color: 'var(--text)' }}>
+          <div className="flex-1 rounded-2xl rounded-tl-sm p-4"
+            style={{ background: 'rgba(74,124,89,0.08)', border: '1px solid rgba(74,124,89,0.2)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--green)' }}>
+              🌿 Toque de Mestre do Apé
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
               {din.dicaFacilitador}
             </p>
-          )}
-        </button>
+          </div>
+        </div>
 
         {/* Vídeo Explicativo */}
         <div
