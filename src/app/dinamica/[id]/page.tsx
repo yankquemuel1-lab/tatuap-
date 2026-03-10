@@ -23,6 +23,15 @@ const ICONES_DINAMICA: Record<string, string> = {
   'roda-de-encerramento': '🌅',
 }
 
+const VIDEOS: Record<string, string> = {
+  'samba-de-roda': 'vt_8ZSJ4ktc',
+  'coco-de-roda': 'iv1SbMCqEBk',
+  'tambor-de-crioula': '1Z4gAigXLts',
+  'maculele': 'QmZfUYHh_0o',
+  'danca-do-tore': 'ejN9eYpyIRk',
+  'bate-coxa': '9GmJPNIZ2dE',
+}
+
 const CAT_GRAD: Record<string, string> = {
   'dancas-musicas': 'linear-gradient(135deg, #e2715a 0%, #f4a261 100%)',
   'jogos-tradicao': 'linear-gradient(135deg, #2d6a4f 0%, #52b788 100%)',
@@ -334,6 +343,67 @@ export default function DinamicaPage() {
             </p>
           )}
         </button>
+
+        {/* Vídeo Explicativo */}
+        <div
+          className="rounded-2xl overflow-hidden mb-4"
+          style={{
+            background: 'linear-gradient(135deg, #1a1a5e 0%, #3a2060 100%)',
+            boxShadow: '0 4px 24px rgba(26,26,94,0.25)',
+          }}
+        >
+          {/* Cabeçalho do card */}
+          <div className="px-5 pt-5 pb-4 flex items-start gap-3">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl"
+              style={{ background: 'rgba(255,255,255,0.12)' }}
+            >
+              🎬
+            </div>
+            <div>
+              <p className="text-white font-extrabold text-base leading-tight">
+                Aprenda agora em vídeo
+              </p>
+              <p className="text-white/65 text-xs mt-0.5">
+                Pratique com sua turminha!
+              </p>
+            </div>
+          </div>
+
+          {/* Vídeo ou placeholder */}
+          {VIDEOS[din.id] ? (
+            <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${VIDEOS[din.id]}?rel=0&modestbranding=1`}
+                title={`Vídeo: ${din.nome}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+              />
+            </div>
+          ) : (
+            <div
+              className="relative mx-4 mb-4 rounded-xl overflow-hidden flex flex-col items-center justify-center gap-2"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <Image
+                src="/tatu-perfil.jpg"
+                alt="Em breve"
+                fill
+                className="object-cover object-top"
+                style={{ opacity: 0.18 }}
+                sizes="(max-width: 480px) 100vw, 480px"
+              />
+              <div className="relative z-10 flex flex-col items-center gap-2 px-4 text-center">
+                <span className="text-4xl">🎬</span>
+                <p className="text-white font-extrabold text-base">Em breve!</p>
+                <p className="text-white/60 text-xs leading-relaxed">
+                  Vídeo da Prof. Andréa chegando em breve para esta brincadeira
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Action */}
         {dp.quizCompleto ? (
