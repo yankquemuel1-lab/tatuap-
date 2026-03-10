@@ -1,7 +1,7 @@
 {
   "name": "Tatuapé App — Cultura Popular",
   "short_name": "Tatuapé App",
-  "description": "33 dinâmicas da cultura popular afro-brasileira e indígena",
+  "description": "Uma coletânea viva das principais brincadeiras de roda da cultura popular afro-brasileira, indígena e europeia.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F5F0E8",

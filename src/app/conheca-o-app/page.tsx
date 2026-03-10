@@ -101,7 +101,7 @@ const NAVEGACAO = [
   {
     icone: <Map size={20} />,
     titulo: 'Trilha de Brincadeiras',
-    texto: 'Acesse pelo ícone de mapa na barra inferior. Explore as 33 dinâmicas, filtre por categoria e busque por nome.',
+    texto: 'Acesse pelo ícone de mapa na barra inferior. Explore a coletânea de brincadeiras, filtre por categoria e busque por nome.',
     cor: '#4a7c59',
   },
   {
@@ -159,7 +159,7 @@ export default function ConhecaOAppPage() {
           style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}>
           <h2 className="text-2xl font-extrabold mb-1">Tatuapé App 🐾</h2>
           <p className="text-sm leading-relaxed opacity-90">
-            33 dinâmicas da cultura popular afro-brasileira, indígena e europeia. Aprenda, jogue e transmita sabedoria ancestral.
+            Uma coletânea viva das principais brincadeiras de roda da cultura popular afro-brasileira, indígena e europeia. Aprenda, jogue e transmita sabedoria ancestral.
           </p>
         </div>
 
@@ -189,7 +189,7 @@ export default function ConhecaOAppPage() {
         {/* Sumário */}
         <section>
           <h2 className="text-lg font-extrabold mb-3" style={{ color: 'var(--text)' }}>
-            📋 Sumário das 33 Brincadeiras
+            📋 Sumário das Brincadeiras
           </h2>
           <div className="flex flex-col gap-3">
             {SUMARIO.map((cat) => (

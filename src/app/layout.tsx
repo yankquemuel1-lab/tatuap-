@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tatuapé — Brincadeiras da Cultura Popular",
-    description: "33 brincadeiras ancestrais para crianças e adultos",
+    description: "Uma coletânea das principais brincadeiras de roda da cultura popular afro-brasileira, indígena e europeia.",
     type: "website",
   },
 }

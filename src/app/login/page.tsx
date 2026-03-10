@@ -65,7 +65,7 @@ export default function LoginPage() {
           Tatuapé App
         </h1>
         <p className="text-sm text-center mt-2 leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
-          Explore as brincadeiras de roda com o Apé, nosso tatu canastra da cultura popular
+          A coletânea das principais brincadeiras de roda da cultura popular afro-brasileira, com o Apé como guia
         </p>
       </div>
 
