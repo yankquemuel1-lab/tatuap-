@@ -3,11 +3,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
-import { ARTIGOS_CULTURA } from '@/data/cultura'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Clock, Mail, Compass, X } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass, X } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const LABEL_CURTO: Record<string, string> = {
@@ -32,7 +30,6 @@ const CAT_ICON: Record<string, string> = {
 }
 
 export default function HomePage() {
-  const router = useRouter()
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
   const [popup, setPopup] = useState(false)
@@ -218,42 +215,65 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Cultura Popular — blog */}
+      {/* Materiais de Apoio */}
       <section className="px-4 pt-6 pb-2">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">🎭</span>
-            <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Cultura Popular</h2>
-          </div>
-          <Link href="/newsletter" className="text-xs font-bold" style={{ color: 'var(--primary)' }}>
-            Ver tudo
-          </Link>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg">📦</span>
+          <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Materiais de Apoio</h2>
         </div>
         <div className="flex flex-col gap-3">
-          {ARTIGOS_CULTURA.map((artigo) => (
-            <Link key={artigo.slug} href={`/cultura/${artigo.slug}`}
+          {[
+            {
+              emoji: '🎵',
+              titulo: 'Musicalidade',
+              descricao: 'Músicas, áudios e links para baixar toques, ritmos e cantos das brincadeiras',
+              cor: '#c4503c',
+              corBg: '#fdf0ed',
+              grad: 'linear-gradient(135deg, #e2715a 0%, #f4a261 100%)',
+            },
+            {
+              emoji: '📚',
+              titulo: 'PDF e Pesquisas',
+              descricao: 'Materiais escritos, estudos, referências e leituras complementares sobre cultura popular',
+              cor: '#1a1a5e',
+              corBg: '#eeeef8',
+              grad: 'linear-gradient(135deg, #1a1a5e 0%, #3a3a9a 100%)',
+            },
+            {
+              emoji: '🎶',
+              titulo: 'Histórias Cantadas',
+              descricao: 'Prof. Andréa Penha canta histórias da cultura popular afro-indígena para a sua roda',
+              cor: '#2d6a4f',
+              corBg: '#edf7f0',
+              grad: 'linear-gradient(135deg, #2d6a4f 0%, #52b788 100%)',
+            },
+          ].map((mat) => (
+            <div
+              key={mat.titulo}
               className="flex items-center gap-4 p-4 rounded-2xl bg-white"
-              style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}>
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ background: artigo.corClara }}>
-                {artigo.emoji}
+              style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}
+            >
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                style={{ background: mat.grad }}
+              >
+                {mat.emoji}
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>
-                  {artigo.titulo}
+                  {mat.titulo}
                 </h3>
                 <p className="text-xs mt-0.5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  {artigo.resumo}
+                  {mat.descricao}
                 </p>
-                <span className="inline-flex items-center gap-1 text-xs mt-1" style={{ color: artigo.cor }}>
-                  <Clock size={10} /> {artigo.tempoLeitura}
+                <span
+                  className="inline-flex items-center gap-1 text-xs mt-1.5 font-bold px-2.5 py-0.5 rounded-full"
+                  style={{ background: mat.corBg, color: mat.cor }}
+                >
+                  🕐 Em breve
                 </span>
               </div>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: artigo.corClara, color: artigo.cor }}>
-                <ChevronRight size={16} />
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
