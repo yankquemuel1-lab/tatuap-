@@ -146,24 +146,24 @@ export const QUIZ: Record<string, QuizPergunta[]> = {
       explicacao: 'Tirar os sapatos e sentir o chão é gesto de respeito — o chão é como altar para os povos que praticam o Toré.',
     },
   ],
-  'danca-do-awe': [
+  'siriri': [
     {
-      pergunta: 'O povo Pataxó habita qual região do Brasil?',
-      opcoes: ['Norte da Amazônia', 'Sul da Bahia', 'Pantanal mato-grossense', 'Serra do Nordeste'],
+      pergunta: 'Qual instrumento é o símbolo do Siriri e Patrimônio Cultural Imaterial do Brasil?',
+      opcoes: ['Berimbau', 'Viola de cocho', 'Tambor de crioula', 'Rabeca'],
       correta: 1,
-      explicacao: 'Os Pataxó habitam o sul da Bahia, especialmente em Monte Pascoal — local do primeiro encontro com os portugueses.',
+      explicacao: 'A Viola de Cocho, feita de uma única peça de madeira mole, é o instrumento símbolo do Siriri e foi reconhecida pelo IPHAN em 2004.',
     },
     {
-      pergunta: 'Os Pataxó foram declarados extintos pelo governo em que ano?',
-      opcoes: ['1761', '1861', '1900', '1945'],
-      correta: 1,
-      explicacao: 'Os Pataxó foram declarados extintos em 1861, mas sobreviveram na clandestinidade. Hoje são mais de 13.000 pessoas.',
+      pergunta: 'O Siriri é a dança tradicional de qual região do Brasil?',
+      opcoes: ['Baixada Cuiabana, Mato Grosso', 'Recôncavo Baiano', 'Litoral Cearense', 'Serra Gaúcha'],
+      correta: 0,
+      explicacao: 'O Siriri é a expressão cultural mais característica da Baixada Cuiabana, região de várzeas em torno de Cuiabá, capital de Mato Grosso.',
     },
     {
-      pergunta: 'O que o Awê representa para o povo Pataxó?',
-      opcoes: ['Uma brincadeira de criança', 'Símbolo de resistência e renascimento cultural', 'Uma dança para turistas', 'Um ritual de guerra'],
-      correta: 1,
-      explicacao: 'O Awê foi central na retomada da identidade Pataxó — é símbolo de resistência e renascimento cultural.',
+      pergunta: 'De onde vem o nome "Siriri"?',
+      opcoes: ['De uma palavra indígena Bororo', 'Do nome de uma mestra tradicional', 'De um besouro cuja vibração ritmada inspirou a dança', 'De um canto de trabalho das minas de ouro'],
+      correta: 2,
+      explicacao: 'O nome Siriri vem de um besouro da região do Mato Grosso, cujo zum-zum ritmado inspirou o compasso característico da dança.',
     },
   ],
   'bate-coxa': [

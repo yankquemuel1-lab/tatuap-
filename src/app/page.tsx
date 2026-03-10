@@ -195,7 +195,6 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {Object.entries(CATEGORIAS).map(([key]) => {
-            const count = DINAMICAS.filter(d => d.categoria === key).length
             return (
               <Link key={key} href={`/trilha?categoria=${key}`}
                 className="rounded-2xl flex flex-col justify-end aspect-square shadow-md relative overflow-hidden">
@@ -212,7 +211,6 @@ export default function HomePage() {
                     <span className="text-xl">{CAT_ICON[key]}</span>
                     <p className="text-white font-bold text-sm leading-tight">{LABEL_CURTO[key]}</p>
                   </div>
-                  <p className="text-white/70 text-xs mt-1">{count} brincadeiras</p>
                 </div>
               </Link>
             )

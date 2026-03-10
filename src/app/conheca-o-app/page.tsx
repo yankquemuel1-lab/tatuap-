@@ -15,7 +15,7 @@ const SUMARIO = [
       { num: '05', nome: 'Tambor de Crioula' },
       { num: '06', nome: 'Maculelê' },
       { num: '07', nome: 'Dança do Toré' },
-      { num: '08', nome: 'Dança do Awê' },
+      { num: '08', nome: 'Siriri' },
       { num: '09', nome: 'Bate Coxa' },
     ],
   },
@@ -159,7 +159,7 @@ export default function ConhecaOAppPage() {
           style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}>
           <h2 className="text-2xl font-extrabold mb-1">Tatuapé App 🐾</h2>
           <p className="text-sm leading-relaxed opacity-90">
-            Uma coletânea viva das principais brincadeiras de roda da cultura popular afro-brasileira, indígena e europeia. Aprenda, jogue e transmita sabedoria ancestral.
+            Uma coletânea viva das principais brincadeiras de roda da cultura popular afro-indígena brasileira. Aprenda, jogue e transmita sabedoria ancestral.
           </p>
         </div>
 

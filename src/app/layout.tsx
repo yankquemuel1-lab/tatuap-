@@ -4,7 +4,7 @@ import { AuthGuard } from "@/components/AuthGuard"
 
 export const metadata: Metadata = {
   title: "Tatuapé — Brincadeiras da Cultura Popular",
-  description: "Explore danças, jogos e rodas da cultura popular afro-brasileira, indígena e europeia. Brincadeiras ancestrais para crianças e adultos.",
+  description: "Explore danças, jogos e rodas da cultura popular afro-indígena brasileira. Brincadeiras ancestrais para crianças e adultos.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tatuapé — Brincadeiras da Cultura Popular",
-    description: "Uma coletânea das principais brincadeiras de roda da cultura popular afro-brasileira, indígena e europeia.",
+    description: "Uma coletânea das principais brincadeiras de roda da cultura popular afro-indígena brasileira.",
     type: "website",
   },
 }

@@ -12,7 +12,7 @@ import { toggleFavorito, isFavorito } from '@/lib/favoritos'
 
 const ICONES_DINAMICA: Record<string, string> = {
   'samba-de-roda': '🥁', 'coco-de-roda': '🌊', 'ciranda': '🤝', 'jongo': '🔥',
-  'tambor-de-crioula': '🥁', 'maculele': '🪵', 'danca-do-tore': '🌿', 'danca-do-awe': '🌸',
+  'tambor-de-crioula': '🥁', 'maculele': '🪵', 'danca-do-tore': '🌿', 'siriri': '🎻',
   'bate-coxa': '👐', 'obwisana': '🪨', 'a-canoa-virou': '⛵', 'brincadeira-da-mandioca': '🌱',
   'passa-o-anel': '💍', 'terra-mar': '🌊', 'fogo-na-montanha': '⛰️', 'mamba-em-roda': '🐍',
   'jogo-do-pilao': '🌾', 'ampe': '✋', 'peteca-em-roda': '🪶', 'kameshi-mpuku-ne': '🐭',
