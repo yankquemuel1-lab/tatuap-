@@ -80,10 +80,14 @@ export function ApeChat({ onClose }: { onClose: () => void }) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: novasMsgs }),
+        body: JSON.stringify({ messages: novasMsgs, userId }),
       })
       const data = await res.json()
-      setMsgs(prev => [...prev, { role: 'assistant', content: data.reply || 'Hmm, algo deu errado. Tenta de novo?' }])
+      if (res.status === 429) {
+        setMsgs(prev => [...prev, { role: 'assistant', content: data.error || 'Muitas mensagens em pouco tempo. Aguarda alguns minutinhos!' }])
+      } else {
+        setMsgs(prev => [...prev, { role: 'assistant', content: data.reply || 'Hmm, algo deu errado. Tenta de novo?' }])
+      }
     } catch {
       setMsgs(prev => [...prev, { role: 'assistant', content: 'Opa, tive um problema aqui na toca. Tenta de novo!' }])
     } finally {

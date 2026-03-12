@@ -1,5 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Rate limiting: 20 mensagens por usuário a cada 10 minutos
+// Armazena em memória (reseta a cada deploy — suficiente para MVP)
+const rateLimit = new Map<string, { count: number; resetAt: number }>()
+const LIMIT = 20
+const WINDOW_MS = 10 * 60 * 1000 // 10 minutos
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now()
+  const record = rateLimit.get(userId)
+
+  if (!record || now > record.resetAt) {
+    rateLimit.set(userId, { count: 1, resetAt: now + WINDOW_MS })
+    return true
+  }
+
+  if (record.count >= LIMIT) return false
+
+  record.count++
+  return true
+}
+
 const SYSTEM_PROMPT = `Você é o Apé, um tatu canastra animado e sábio que vive no app Tatuapé — uma plataforma de brincadeiras da cultura popular afro-brasileira, indígena e europeia para educadores, facilitadores e famílias.
 
 PERSONALIDADE:
@@ -98,7 +119,16 @@ Responda sempre em português brasileiro.`
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json()
+    const { messages, userId } = await req.json()
+
+    // Rate limiting por userId (ou IP como fallback)
+    const identifier = userId || req.headers.get('x-forwarded-for') || 'anonymous'
+    if (!checkRateLimit(identifier)) {
+      return NextResponse.json(
+        { error: 'Muitas mensagens em pouco tempo. Aguarde alguns minutos!' },
+        { status: 429 }
+      )
+    }
 
     const apiKey = process.env.GEMINI_API_KEY
     if (!apiKey) {
