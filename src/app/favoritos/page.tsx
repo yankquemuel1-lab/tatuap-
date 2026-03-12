@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, Heart, Zap, Users } from 'lucide-react'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
 import { getFavoritos } from '@/lib/favoritos'
+import { supabase } from '@/lib/supabase'
 import { BottomNav } from '@/components/BottomNav'
 
 const ICONES_DINAMICA: Record<string, string> = {
@@ -32,7 +33,9 @@ export default function FavoritosPage() {
   const [favIds, setFavIds] = useState<string[]>([])
 
   useEffect(() => {
-    setFavIds(getFavoritos())
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setFavIds(getFavoritos(data.user.id))
+    })
   }, [])
 
   const favDinamicas = DINAMICAS.filter(d => favIds.includes(d.id))

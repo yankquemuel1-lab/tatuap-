@@ -53,3 +53,24 @@ alter table public.newsletter_emails enable row level security;
 create policy "Qualquer pessoa pode assinar a newsletter"
   on public.newsletter_emails for insert
   with check (true);
+
+-- 4. Tabela de feedbacks (Fale Conosco)
+create table public.feedbacks (
+  id uuid default gen_random_uuid() primary key,
+  tipo text not null check (tipo in ('sugestao', 'elogio', 'critica', 'duvida')),
+  mensagem text not null,
+  usuario_id uuid references auth.users on delete set null,
+  usuario_email text,
+  usuario_nome text,
+  created_at timestamp with time zone default now()
+);
+
+alter table public.feedbacks enable row level security;
+
+create policy "Usuário autenticado pode enviar feedback"
+  on public.feedbacks for insert
+  with check (auth.uid() = usuario_id or usuario_id is null);
+
+create policy "Apenas admins veem feedbacks"
+  on public.feedbacks for select
+  using (false);

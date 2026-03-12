@@ -9,6 +9,7 @@ import { getDinamicaProgress, marcarLeituraCompleta, type DinamicaProgress } fro
 import { ArrowLeft, Clock, Users, BookOpen, CheckCircle, ArrowRight, Heart } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 import { toggleFavorito, isFavorito } from '@/lib/favoritos'
+import { supabase } from '@/lib/supabase'
 
 const ICONES_DINAMICA: Record<string, string> = {
   'samba-de-roda': '🥁', 'coco-de-roda': '🌊', 'ciranda': '🤝', 'jongo': '🔥',
@@ -30,6 +31,9 @@ const VIDEOS: Record<string, string> = {
   'maculele': 'QmZfUYHh_0o',
   'danca-do-tore': 'ejN9eYpyIRk',
   'bate-coxa': '9GmJPNIZ2dE',
+  'ciranda': 'Zq2S6qadAKQ',
+  'jongo': 'N8cmQHKsNC0',
+  'siriri': 'JKz_klurecQ',
 }
 
 const CAT_GRAD: Record<string, string> = {
@@ -45,21 +49,29 @@ export default function DinamicaPage() {
   const [flipped, setFlipped] = useState(false)
   const [leituraFeita, setLeituraFeita] = useState(false)
   const [favorito, setFavorito] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
   const [dp, setDp] = useState<DinamicaProgress>({ leituraCompleta: false, quizCompleto: false, quizPontuacao: 0, conquistas: [] })
 
   const din = DINAMICAS.find(d => d.id === id)
 
   useEffect(() => {
-    if (!din) return
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setUserId(data.user.id)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!din || !userId) return
     getDinamicaProgress(id).then(prog => {
       setDp(prog)
       setLeituraFeita(prog.leituraCompleta)
     })
-    setFavorito(isFavorito(id))
-  }, [din, id])
+    setFavorito(isFavorito(id, userId))
+  }, [din, id, userId])
 
   const handleToggleFavorito = () => {
-    const adicionado = toggleFavorito(id)
+    if (!userId) return
+    const adicionado = toggleFavorito(id, userId)
     setFavorito(adicionado)
   }
 
@@ -223,7 +235,7 @@ export default function DinamicaPage() {
                 </button>
                 <div className="mt-3 rounded-xl px-3.5 py-2.5 text-center" style={{ background: `${cat.cor}10`, border: `1px solid ${cat.cor}25` }}>
                   <p className="text-sm font-semibold italic" style={{ color: cat.cor }}>
-                    Conheça o contexto histórico cultural d{/^[aeiouAEIOU]/.test(din.nome) ? 'a' : 'o'} {din.nome} 👆
+                    Conheça o contexto histórico cultural d{/^[aeiouAEIOU]/.test(din.nome) ? 'a' : 'o'} {din.nome} 👆🏾
                   </p>
                 </div>
               </div>

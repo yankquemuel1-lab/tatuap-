@@ -5,8 +5,10 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass, X } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass, X, MessageCircleHeart } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
+import { FaleConoscoForm } from '@/components/FaleConoscoForm'
+import { ApeChat } from '@/components/ApeChat'
 
 const LABEL_CURTO: Record<string, string> = {
   'dancas-musicas': 'Danças de Roda',
@@ -33,6 +35,8 @@ export default function HomePage() {
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
   const [popup, setPopup] = useState(false)
+  const [feedbackModal, setFeedbackModal] = useState(false)
+  const [chatAberto, setChatAberto] = useState(false)
   const [girando, setGirando] = useState(false)
   const [resultadoSorteio, setResultadoSorteio] = useState<typeof DINAMICAS[0] | null>(null)
 
@@ -131,6 +135,10 @@ export default function HomePage() {
           from { opacity: 0; transform: scale(0.85) translateY(20px); }
           to   { opacity: 1; transform: scale(1)    translateY(0); }
         }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(60px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
 
       {/* Header */}
@@ -157,21 +165,54 @@ export default function HomePage() {
 
       {/* Mascot guide */}
       <section className="px-4 pt-5 pb-1">
-        <div className="flex items-center gap-4 p-4 rounded-2xl"
-          style={{ background: 'rgba(226,113,90,0.08)', border: '1px solid rgba(226,113,90,0.15)' }}>
-          <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 shadow-md"
-            style={{ borderColor: 'rgba(226,113,90,0.3)' }}>
+        <style>{`
+          @keyframes ape-float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-5px); }
+          }
+          @keyframes ape-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(226,113,90,0.0), 0 4px 16px rgba(226,113,90,0.15); }
+            50%       { box-shadow: 0 0 0 6px rgba(226,113,90,0.12), 0 4px 20px rgba(226,113,90,0.25); }
+          }
+          @keyframes ape-shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+          }
+          .ape-card {
+            background: linear-gradient(135deg, rgba(226,113,90,0.10) 0%, rgba(244,162,97,0.08) 50%, rgba(226,113,90,0.10) 100%);
+            border: 1px solid rgba(226,113,90,0.2);
+            animation: ape-glow 3s ease-in-out infinite;
+          }
+          .ape-avatar {
+            animation: ape-float 3s ease-in-out infinite;
+          }
+          .ape-label {
+            background: linear-gradient(90deg, #e2715a, #f4a261, #e2715a);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: ape-shimmer 3s linear infinite;
+          }
+        `}</style>
+        <button onClick={() => setChatAberto(true)} className="ape-card w-full flex items-center gap-4 p-4 rounded-2xl text-left" style={{ border: 'none', cursor: 'pointer' }}>
+          <div className="ape-avatar w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 shadow-md"
+            style={{ borderColor: 'rgba(226,113,90,0.35)' }}>
             <Image src="/tatu-perfil.jpg" alt="Apé" width={64} height={64} className="w-full h-full object-cover" />
           </div>
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: 'var(--primary)' }}>
+          <div style={{ flex: 1 }}>
+            <p className="ape-label text-xs font-bold uppercase tracking-wider mb-0.5">
               OI, EU SOU O APÉ!
             </p>
             <p className="text-sm leading-snug" style={{ color: '#374151' }}>
               Vamos explorar nossas brincadeiras ancestrais hoje? 🎉
             </p>
+            <p className="text-xs mt-1 font-semibold" style={{ color: 'rgba(226,113,90,0.7)' }}>
+              Toque para conversar comigo →
+            </p>
           </div>
-        </div>
+        </button>
+        {chatAberto && <ApeChat onClose={() => setChatAberto(false)} />}
       </section>
 
       {/* Quick access */}
@@ -233,8 +274,20 @@ export default function HomePage() {
           <span className="text-lg">🎲</span>
           <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Sorteio da Roda</h2>
         </div>
-        <div className="rounded-2xl p-5 text-white text-center"
-          style={{ background: 'linear-gradient(135deg, #1a1a5e 0%, #3a2060 100%)', boxShadow: '0 4px 24px rgba(26,26,94,0.25)' }}>
+        <style>{`
+          @keyframes sorteio-gradient {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .sorteio-card {
+            background: linear-gradient(-45deg, #1a1a5e, #3a2060, #2d0a6b, #1a3a6e, #4a1a7a, #1a1a5e);
+            background-size: 300% 300%;
+            animation: sorteio-gradient 6s ease infinite;
+          }
+        `}</style>
+        <div className="sorteio-card rounded-2xl p-5 text-white text-center"
+          style={{ boxShadow: '0 4px 32px rgba(58,32,96,0.4)' }}>
 
           {/* avatar do Apé */}
           <div className={`w-20 h-20 rounded-full overflow-hidden border-4 border-white/30 mx-auto mb-4 shadow-lg ${girando ? 'animate-spin' : ''}`}>
@@ -245,8 +298,8 @@ export default function HomePage() {
             <>
               <p className="font-bold text-base mb-1">Deixa o Apé escolher!</p>
               <p className="text-white/65 text-xs mb-4">Não sabe qual brincadeira fazer hoje? Gira a roda!</p>
-              <button onClick={girar} className="py-2.5 px-6 rounded-full font-bold text-sm"
-                style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)' }}>
+              <button onClick={girar} className="py-2.5 px-6 rounded-full font-bold text-sm animate-pulse-soft"
+                style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 0 20px rgba(255,255,255,0.15)' }}>
                 Girar a Roda! 🎲
               </button>
             </>
@@ -285,51 +338,42 @@ export default function HomePage() {
           <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>Materiais de Apoio</h2>
         </div>
         <div className="flex flex-col gap-3">
-          {[
-            {
-              emoji: '🎵',
-              titulo: 'Musicalidade',
-              descricao: 'Aprenda toques, ritmos e cantos para aplicar nas suas aulas',
-              cor: '#c4503c',
-              corBg: '#fdf0ed',
-              grad: 'linear-gradient(135deg, #e2715a 0%, #f4a261 100%)',
-            },
-            {
-              emoji: '🎶',
-              titulo: 'Histórias Cantadas',
-              descricao: 'Aprenda histórias cantadas da cultura popular afro-indígena brasileira para aplicar na sua roda',
-              cor: '#2d6a4f',
-              corBg: '#edf7f0',
-              grad: 'linear-gradient(135deg, #2d6a4f 0%, #52b788 100%)',
-            },
-          ].map((mat) => (
-            <div
-              key={mat.titulo}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-white"
-              style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}
-            >
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ background: mat.grad }}
-              >
-                {mat.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>
-                  {mat.titulo}
-                </h3>
-                <p className="text-xs mt-0.5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  {mat.descricao}
-                </p>
-                <span
-                  className="inline-flex items-center gap-1 text-xs mt-1.5 font-bold px-2.5 py-0.5 rounded-full"
-                  style={{ background: mat.corBg, color: mat.cor }}
-                >
-                  🕐 Em breve
-                </span>
-              </div>
+          {/* Card ativo: Musicalidade */}
+          <Link href="/materiais" className="flex items-center gap-4 p-4 rounded-2xl bg-white"
+            style={{ border: '1px solid rgba(226,113,90,0.25)', boxShadow: 'var(--shadow)', textDecoration: 'none' }}>
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #e2715a 0%, #f4a261 100%)' }}>
+              🎵
             </div>
-          ))}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>Musicalidade</h3>
+              <p className="text-xs mt-0.5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                Aprenda toques, ritmos e cantos para aplicar nas suas aulas
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs mt-1.5 font-bold px-2.5 py-0.5 rounded-full"
+                style={{ background: '#fdf0ed', color: '#c4503c' }}>
+                ▶ Acessar agora
+              </span>
+            </div>
+          </Link>
+          {/* Card em breve: Histórias Cantadas */}
+          <div className="flex items-center gap-4 p-4 rounded-2xl bg-white"
+            style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}>
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #2d6a4f 0%, #52b788 100%)' }}>
+              🎶
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>Histórias Cantadas</h3>
+              <p className="text-xs mt-0.5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                Aprenda histórias cantadas da cultura popular afro-indígena brasileira para aplicar na sua roda
+              </p>
+              <span className="inline-flex items-center gap-1 text-xs mt-1.5 font-bold px-2.5 py-0.5 rounded-full"
+                style={{ background: '#edf7f0', color: '#2d6a4f' }}>
+                🕐 Em breve
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -385,6 +429,72 @@ export default function HomePage() {
           />
         </div>
       </section>
+
+      {/* Card Fale Conosco */}
+      <section className="px-4 pb-4">
+        <button
+          onClick={() => setFeedbackModal(true)}
+          className="w-full rounded-2xl p-5 flex items-center gap-4 text-left"
+          style={{
+            background: 'white',
+            boxShadow: 'var(--shadow)',
+            border: '1.5px solid rgba(226,113,90,0.15)',
+          }}
+        >
+          <div
+            className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}
+          >
+            <MessageCircleHeart size={26} color="white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-extrabold text-base leading-tight" style={{ color: 'var(--text)' }}>
+              Fale com a gente
+            </p>
+            <p className="text-xs mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>
+              Sugestões, elogios, críticas — o Apé escuta tudo 🌿
+            </p>
+          </div>
+          <ChevronRight size={18} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+        </button>
+      </section>
+
+      {/* Modal Fale Conosco */}
+      {feedbackModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center px-0"
+          style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setFeedbackModal(false) }}
+        >
+          <div
+            className="w-full max-w-lg rounded-t-3xl p-6 flex flex-col gap-5"
+            style={{
+              background: 'white',
+              boxShadow: '0 -8px 48px rgba(0,0,0,0.18)',
+              animation: 'slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1) both',
+              maxHeight: '90dvh',
+              overflowY: 'auto',
+            }}
+          >
+            {/* Handle + fechar */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircleHeart size={20} style={{ color: 'var(--primary)' }} />
+                <h2 className="text-lg font-extrabold" style={{ color: 'var(--text)' }}>Fale com a gente</h2>
+              </div>
+              <button
+                onClick={() => setFeedbackModal(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full"
+                style={{ background: 'rgba(0,0,0,0.06)', color: '#666' }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <FaleConoscoForm compact onSuccess={() => setTimeout(() => setFeedbackModal(false), 2500)} />
+          </div>
+        </div>
+      )}
 
       <BottomNav />
     </main>

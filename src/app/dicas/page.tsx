@@ -49,7 +49,7 @@ const SECOES: { id: string; titulo: string; cor: string; emoji: string; blocos: 
           {
             titulo: 'Faixa Etária',
             texto: 'As indicações de idade são orientações, não regras. Grupos mistos enriquecem a experiência.',
-            emoji: '👶',
+            emoji: '👶🏾',
           },
           {
             titulo: 'Contextualize Sempre',
@@ -59,7 +59,7 @@ const SECOES: { id: string; titulo: string; cor: string; emoji: string; blocos: 
           {
             titulo: 'Segurança Afetiva',
             texto: 'Ninguém é forçado. Crie combinados antes: respeito ao espaço e celebração do erro.',
-            emoji: '🤝',
+            emoji: '🤝🏾',
           },
           {
             titulo: 'Variações',

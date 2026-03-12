@@ -214,10 +214,10 @@ export const QUIZ: Record<string, QuizPergunta[]> = {
       explicacao: 'A canoa é meio de transporte, sobrevivência e identidade para os povos indígenas amazônicos e comunidades quilombolas.',
     },
     {
-      pergunta: 'No jogo, quem pode "salvar" alguém que está no centro?',
-      opcoes: ['Apenas o facilitador', 'Quem estiver no centro pode salvar alguém', 'Ninguém pode ser salvo', 'O mais novo do grupo'],
+      pergunta: 'No jogo, quem está naufragando no centro pode fazer o quê?',
+      opcoes: ['Apenas o facilitador pode salvar alguém', 'Salvar alguém de fora da roda', 'Ninguém pode ser salvo', 'O mais novo do grupo'],
       correta: 1,
-      explicacao: 'Quem está no centro pode "salvar" alguém — os dois fazem gesto de vitória, equilibrando brincadeira e cuidado.',
+      explicacao: 'Quem está no centro naufragando pode salvar alguém de fora — os dois comemoram juntos, equilibrando brincadeira e cuidado.',
     },
     {
       pergunta: 'Qual valor importante essa brincadeira trabalha?',
@@ -229,9 +229,9 @@ export const QUIZ: Record<string, QuizPergunta[]> = {
   'brincadeira-da-mandioca': [
     {
       pergunta: 'A mandioca foi domesticada há quanto tempo pelos povos indígenas?',
-      opcoes: ['500 anos', '2.000 anos', '10.000 anos', '100 anos'],
+      opcoes: ['500 anos', '2.000 anos', '8.000 anos', '100 anos'],
       correta: 2,
-      explicacao: 'A mandioca foi domesticada pelos povos indígenas da Amazônia há mais de 10.000 anos.',
+      explicacao: 'A mandioca foi domesticada pelos povos indígenas da Amazônia há mais de 8.000 anos.',
     },
     {
       pergunta: 'A Brincadeira da Mandioca vem dos povos:',
@@ -428,10 +428,10 @@ export const QUIZ: Record<string, QuizPergunta[]> = {
   ],
   'roda-das-plantas-medicinais': [
     {
-      pergunta: 'Quanto por cento dos medicamentos modernos têm princípios ativos de plantas indígenas?',
-      opcoes: ['20%', '50%', 'Mais de 80%', '100%'],
+      pergunta: 'Quanto por cento dos medicamentos modernos têm princípios ativos de plantas?',
+      opcoes: ['5%', '10%', '25%', '50%'],
       correta: 2,
-      explicacao: 'Mais de 80% dos medicamentos modernos têm princípios ativos descobertos primeiro em plantas usadas por povos indígenas.',
+      explicacao: 'Cerca de 25% dos medicamentos modernos têm princípios ativos diretamente extraídos de plantas, muitas delas usadas primeiro por povos indígenas.',
     },
     {
       pergunta: 'As benzedeiras afro-brasileiras são guardiãs de:',

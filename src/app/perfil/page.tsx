@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, Camera, KeyRound, Eye, EyeOff } from 'lucide-react'
+import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, Camera, KeyRound, Eye, EyeOff, MessageCircleHeart, ChevronDown, ChevronUp } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getProgress, defaultProgress, type UserProgress } from '@/lib/progress'
+import { limparFavoritos } from '@/lib/favoritos'
 import { BottomNav } from '@/components/BottomNav'
 
 interface UserInfo {
@@ -43,6 +44,7 @@ export default function PerfilPage() {
   const [erroFoto, setErroFoto] = useState('')
 
   // Troca de senha
+  const [senhaAberta, setSenhaAberta] = useState(false)
   const [novaSenha, setNovaSenha] = useState('')
   const [confirmarSenha, setConfirmarSenha] = useState('')
   const [showNovaSenha, setShowNovaSenha] = useState(false)
@@ -69,6 +71,11 @@ export default function PerfilPage() {
 
   async function handleSair() {
     setSaindo(true)
+    const { data } = await supabase.auth.getUser()
+    if (data.user) {
+      limparFavoritos(data.user.id)
+      try { localStorage.removeItem(`ape-chat-${data.user.id}`) } catch { /* ignore */ }
+    }
     await supabase.auth.signOut()
     router.push('/login')
   }
@@ -320,64 +327,86 @@ export default function PerfilPage() {
 
         {/* Trocar senha */}
         {user && (
-          <div className="rounded-2xl bg-white p-4" style={{ boxShadow: 'var(--shadow)', border: '1px solid rgba(0,0,0,0.05)' }}>
-            <div className="flex items-center gap-2 mb-3">
-              <KeyRound size={18} style={{ color: 'var(--primary)' }} />
-              <h2 className="font-extrabold text-base" style={{ color: 'var(--text)' }}>Trocar senha</h2>
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="relative">
+          <div className="rounded-2xl bg-white overflow-hidden" style={{ boxShadow: 'var(--shadow)', border: '1px solid rgba(0,0,0,0.05)' }}>
+            <button
+              onClick={() => { setSenhaAberta(v => !v); setErroSenha(''); setSucessoSenha('') }}
+              className="w-full flex items-center justify-between gap-2 p-4"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              <div className="flex items-center gap-2">
+                <KeyRound size={18} style={{ color: 'var(--primary)' }} />
+                <span className="font-extrabold text-base" style={{ color: 'var(--text)' }}>Trocar senha</span>
+              </div>
+              {senhaAberta ? <ChevronUp size={16} style={{ color: 'var(--text-muted)' }} /> : <ChevronDown size={16} style={{ color: 'var(--text-muted)' }} />}
+            </button>
+
+            {senhaAberta && (
+              <div className="flex flex-col gap-3 px-4 pb-4">
+                <div className="relative">
+                  <input
+                    type={showNovaSenha ? 'text' : 'password'}
+                    placeholder="Nova senha (mín. 6 caracteres)"
+                    value={novaSenha}
+                    onChange={e => setNovaSenha(e.target.value)}
+                    className="w-full h-12 pl-4 pr-11 rounded-xl text-sm outline-none"
+                    style={{ background: 'var(--bg)', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
+                    onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
+                    onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNovaSenha(!showNovaSenha)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    style={{ color: 'var(--primary)', opacity: 0.6 }}
+                  >
+                    {showNovaSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
                 <input
-                  type={showNovaSenha ? 'text' : 'password'}
-                  placeholder="Nova senha (mín. 6 caracteres)"
-                  value={novaSenha}
-                  onChange={e => setNovaSenha(e.target.value)}
-                  className="w-full h-12 pl-4 pr-11 rounded-xl text-sm outline-none"
+                  type="password"
+                  placeholder="Confirmar nova senha"
+                  value={confirmarSenha}
+                  onChange={e => setConfirmarSenha(e.target.value)}
+                  className="w-full h-12 pl-4 pr-4 rounded-xl text-sm outline-none"
                   style={{ background: 'var(--bg)', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
                   onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
                   onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
                 />
+                {erroSenha && <p className="text-xs font-medium px-1" style={{ color: '#c0392b' }}>{erroSenha}</p>}
+                {sucessoSenha && <p className="text-xs font-medium px-1" style={{ color: '#2d6a4f' }}>{sucessoSenha}</p>}
                 <button
-                  type="button"
-                  onClick={() => setShowNovaSenha(!showNovaSenha)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: 'var(--primary)', opacity: 0.6 }}
+                  onClick={trocarSenha}
+                  disabled={salvandoSenha || !novaSenha || !confirmarSenha}
+                  className="w-full py-3 rounded-xl font-bold text-sm"
+                  style={{
+                    background: 'var(--primary)', color: 'white', fontFamily: 'inherit',
+                    opacity: (salvandoSenha || !novaSenha || !confirmarSenha) ? 0.5 : 1,
+                  }}
                 >
-                  {showNovaSenha ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {salvandoSenha ? 'Salvando...' : 'Salvar nova senha'}
                 </button>
               </div>
-              <input
-                type="password"
-                placeholder="Confirmar nova senha"
-                value={confirmarSenha}
-                onChange={e => setConfirmarSenha(e.target.value)}
-                className="w-full h-12 pl-4 pr-4 rounded-xl text-sm outline-none"
-                style={{ background: 'var(--bg)', border: '1.5px solid rgba(226,113,90,0.2)', color: 'var(--text)', fontFamily: 'inherit' }}
-                onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
-                onBlur={e => (e.target.style.borderColor = 'rgba(226,113,90,0.2)')}
-              />
-              {erroSenha && (
-                <p className="text-xs font-medium px-1" style={{ color: '#c0392b' }}>{erroSenha}</p>
-              )}
-              {sucessoSenha && (
-                <p className="text-xs font-medium px-1" style={{ color: '#2d6a4f' }}>{sucessoSenha}</p>
-              )}
-              <button
-                onClick={trocarSenha}
-                disabled={salvandoSenha || !novaSenha || !confirmarSenha}
-                className="w-full py-3 rounded-xl font-bold text-sm"
-                style={{
-                  background: 'var(--primary)',
-                  color: 'white',
-                  fontFamily: 'inherit',
-                  opacity: (salvandoSenha || !novaSenha || !confirmarSenha) ? 0.5 : 1,
-                }}
-              >
-                {salvandoSenha ? 'Salvando...' : 'Salvar nova senha'}
-              </button>
-            </div>
+            )}
           </div>
         )}
+
+        {/* Fale Conosco */}
+        <Link
+          href="/fale-conosco"
+          className="w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+          style={{
+            background: 'var(--primary-bg)',
+            border: '1.5px solid rgba(226,113,90,0.2)',
+            color: 'var(--primary)',
+            fontFamily: 'inherit',
+          }}
+        >
+          <MessageCircleHeart size={16} />
+          Fale com a gente
+        </Link>
+        <p className="text-xs text-center leading-relaxed" style={{ color: 'var(--text-muted)', marginTop: -10 }}>
+          Conhece uma brincadeira que deveria estar aqui? Tem uma sugestão para o app? 👆
+        </p>
 
         {/* Botão sair */}
         {user && (

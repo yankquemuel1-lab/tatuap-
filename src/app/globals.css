@@ -74,6 +74,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
   100% { transform: scale(1); opacity: 1; }
 }
 @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
 .animate-fadein-up { animation: fadeInUp 0.4s ease-out both; }
 .animate-fadein { animation: fadeIn 0.3s ease-out both; }
