@@ -9,17 +9,32 @@ export async function POST(request: NextRequest) {
     // 1. Ler o payload da Hotmart
     const body = await request.json()
 
-    // 2. Validar o hottok — no v2.0.0 ele vem dentro do body
-    const hottok = body?.hottok
+    // DEBUG TEMPORÁRIO — ver de onde vem o hottok
+    const hottokBody = body?.hottok
+    const hottokQuery = request.nextUrl.searchParams.get('hottok')
+    const hottokHeader = request.headers.get('x-hotmart-hottok')
+    console.log('[Hotmart DEBUG] Chaves no body:', Object.keys(body ?? {}))
+    console.log('[Hotmart DEBUG] hottok no body:', hottokBody ? `${hottokBody.slice(0, 6)}... (len=${hottokBody.length})` : 'AUSENTE')
+    console.log('[Hotmart DEBUG] hottok na URL:', hottokQuery ? `${hottokQuery.slice(0, 6)}... (len=${hottokQuery.length})` : 'AUSENTE')
+    console.log('[Hotmart DEBUG] hottok no header:', hottokHeader ? `${hottokHeader.slice(0, 6)}...` : 'AUSENTE')
+    console.log('[Hotmart DEBUG] hottok esperado:', process.env.HOTMART_HOTTOK ? `${process.env.HOTMART_HOTTOK.slice(0, 6)}... (len=${process.env.HOTMART_HOTTOK.length})` : 'NÃO CONFIGURADO')
+
+    // 2. Validar o hottok — checar body e query param
+    const hottok = hottokBody ?? hottokQuery ?? hottokHeader
     if (hottok !== process.env.HOTMART_HOTTOK) {
+      console.error('[Hotmart] Hottok inválido — webhook rejeitado')
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const evento = body?.event
+    console.log('[Hotmart] Evento recebido:', evento)
+    console.log('[Hotmart] Buyer email:', body?.data?.buyer?.email)
 
-    // Só processa compras aprovadas
-    if (evento !== 'PURCHASE_APPROVED') {
-      return NextResponse.json({ message: 'Evento ignorado' }, { status: 200 })
+    // Processa compras aprovadas ou completas (PIX pode gerar PURCHASE_COMPLETE)
+    const EVENTOS_VALIDOS = ['PURCHASE_APPROVED', 'PURCHASE_COMPLETE', 'PURCHASE_BILLET_PRINTED']
+    if (!EVENTOS_VALIDOS.includes(evento)) {
+      console.log('[Hotmart] Evento ignorado:', evento)
+      return NextResponse.json({ message: `Evento ignorado: ${evento}` }, { status: 200 })
     }
 
     const email: string = body?.data?.buyer?.email
@@ -38,17 +53,24 @@ export async function POST(request: NextRequest) {
     })
 
     // Se o usuário já existe, não é erro — só continua para enviar o email
-    if (createError && !createError.message.includes('already been registered')) {
-      console.error('Erro ao criar usuário:', createError.message)
-      return NextResponse.json({ error: createError.message }, { status: 500 })
+    if (createError) {
+      if (createError.message.includes('already been registered') || createError.message.includes('already exists')) {
+        console.log('[Hotmart] Usuário já existe, enviando email mesmo assim:', email)
+      } else {
+        console.error('[Hotmart] Erro ao criar usuário:', createError.message)
+        return NextResponse.json({ error: createError.message }, { status: 500 })
+      }
+    } else {
+      console.log('[Hotmart] Usuário criado com sucesso:', email)
     }
 
     // 4. Enviar email de boas-vindas com as credenciais
     const resend = new Resend(process.env.RESEND_API_KEY)
     const primeiroNome = nome.split(' ')[0]
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://tatuape.com.br'
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://produto-oficial.site'
 
-    await resend.emails.send({
+    console.log('[Hotmart] Enviando email para:', email)
+    const emailResult = await resend.emails.send({
       from: 'Tatuapé <tatuape@produto-oficial.site>',
       to: email,
       subject: '🎉 Seu acesso ao Tatuapé chegou!',
@@ -80,6 +102,8 @@ export async function POST(request: NextRequest) {
         </div>
       `,
     })
+
+    console.log('[Hotmart] Email enviado. ID:', emailResult.data?.id ?? 'sem ID', '| Erro:', emailResult.error ?? 'nenhum')
 
     return NextResponse.json({ message: 'Usuário criado e e-mail enviado com sucesso' }, { status: 200 })
   } catch (error) {
