@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let deferredPrompt: any = null
 
-export type PWAStatus = 'installed' | 'android' | 'ios' | 'unsupported'
+export type PWAStatus = 'installed' | 'android' | 'ios' | 'samsung' | 'unsupported'
 
 export function usePWAInstall() {
   const [status, setStatus] = useState<PWAStatus>('unsupported')
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    // Registra SW
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => null)
     }
@@ -28,17 +27,23 @@ export function usePWAInstall() {
       return
     }
 
+    const ua = navigator.userAgent
+
     // iOS Safari
-    const isIOS =
-      /iphone|ipad|ipod/i.test(navigator.userAgent) &&
-      !/chrome|crios|fxios/i.test(navigator.userAgent)
-    if (isIOS) {
+    if (/iphone|ipad|ipod/i.test(ua) && !/chrome|crios|fxios/i.test(ua)) {
       setStatus('ios')
       setReady(true)
       return
     }
 
-    // Android/Chrome/Samsung — aguarda o evento
+    // Samsung Internet — não dispara beforeinstallprompt de forma confiável
+    if (/SamsungBrowser/i.test(ua)) {
+      setStatus('samsung')
+      setReady(true)
+      return
+    }
+
+    // Chrome/Edge/Chromium Android — aguarda o evento
     const handler = (e: Event) => {
       e.preventDefault()
       deferredPrompt = e
@@ -49,8 +54,8 @@ export function usePWAInstall() {
     return () => window.removeEventListener('beforeinstallprompt', handler)
   }, [])
 
-  async function install(): Promise<'accepted' | 'dismissed' | 'ios'> {
-    if (status === 'ios') return 'ios'
+  async function install(): Promise<'accepted' | 'dismissed' | 'manual'> {
+    if (status === 'ios' || status === 'samsung') return 'manual'
     if (!deferredPrompt) return 'dismissed'
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice

@@ -4,17 +4,44 @@ import { useState } from 'react'
 import { X, Share, Smartphone } from 'lucide-react'
 import { usePWAInstall } from '@/hooks/usePWAInstall'
 
+const INSTRUCTIONS = {
+  ios: {
+    title: 'Instale o app no seu iPhone',
+    modalTitle: 'Adicionar à Tela Inicial',
+    subtitle: 'Siga os passos abaixo no Safari:',
+    button: 'Como instalar',
+    steps: [
+      { text: 'Toque no ícone de Compartilhar na barra inferior', icon: <Share size={16} /> },
+      { text: 'Role e toque em "Adicionar à Tela de Início"', icon: null },
+      { text: 'Toque em "Adicionar" no canto superior direito', icon: null },
+    ],
+  },
+  samsung: {
+    title: 'Salve o app na tela inicial',
+    modalTitle: 'Adicionar à Tela Inicial',
+    subtitle: 'Siga os passos no Samsung Internet:',
+    button: 'Como instalar',
+    steps: [
+      { text: 'Toque no ícone de menu (☰) na barra inferior', icon: null },
+      { text: 'Toque em "Adicionar página a"', icon: null },
+      { text: 'Toque em "Tela inicial"', icon: null },
+    ],
+  },
+}
+
 export function PwaInstallCard() {
   const { status, ready, install } = usePWAInstall()
-  const [iosOpen, setIosOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
   const [done, setDone] = useState(false)
 
-  // Não renderiza nada até o hook resolver, se já instalado, ou se o usuário acabou de instalar
   if (!ready || status === 'installed' || status === 'unsupported' || done) return null
 
+  const isManual = status === 'ios' || status === 'samsung'
+  const info = isManual ? INSTRUCTIONS[status] : null
+
   async function handleClick() {
-    if (status === 'ios') {
-      setIosOpen(true)
+    if (isManual) {
+      setModalOpen(true)
       return
     }
     const outcome = await install()
@@ -41,7 +68,7 @@ export function PwaInstallCard() {
 
         <div className="flex-1 min-w-0">
           <p className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>
-            {status === 'ios' ? 'Instale o app no seu iPhone' : 'Salve o app na tela inicial'}
+            {info ? info.title : 'Salve o app na tela inicial'}
           </p>
           <p className="text-xs mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>
             Acesse com um toque, sem precisar do link
@@ -53,16 +80,16 @@ export function PwaInstallCard() {
           className="px-3 py-2 rounded-xl text-sm font-bold text-white flex-shrink-0"
           style={{ background: 'var(--primary)' }}
         >
-          {status === 'ios' ? 'Como instalar' : 'Instalar'}
+          {isManual ? 'Como instalar' : 'Instalar'}
         </button>
       </div>
 
-      {/* Modal iOS */}
-      {iosOpen && (
+      {/* Modal de instruções (iOS e Samsung) */}
+      {modalOpen && info && (
         <div
           className="fixed inset-0 z-[60] flex items-end justify-center px-4 pb-4"
           style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
-          onClick={() => setIosOpen(false)}
+          onClick={() => setModalOpen(false)}
         >
           <div
             className="w-full max-w-sm rounded-3xl p-6 flex flex-col gap-4"
@@ -71,10 +98,10 @@ export function PwaInstallCard() {
           >
             <div className="flex items-center justify-between">
               <h3 className="font-extrabold text-lg" style={{ color: 'var(--text)' }}>
-                Adicionar à Tela Inicial
+                {info.modalTitle}
               </h3>
               <button
-                onClick={() => setIosOpen(false)}
+                onClick={() => setModalOpen(false)}
                 className="w-8 h-8 flex items-center justify-center rounded-full"
                 style={{ background: 'rgba(0,0,0,0.06)' }}
               >
@@ -83,21 +110,17 @@ export function PwaInstallCard() {
             </div>
 
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-              Siga os passos abaixo no Safari:
+              {info.subtitle}
             </p>
 
             <div className="flex flex-col gap-3">
-              {[
-                { num: '1', text: 'Toque no ícone de Compartilhar', icon: <Share size={16} /> },
-                { num: '2', text: 'Role e toque em "Adicionar à Tela de Início"', icon: null },
-                { num: '3', text: 'Toque em "Adicionar" no canto superior direito', icon: null },
-              ].map((step) => (
-                <div key={step.num} className="flex items-start gap-3">
+              {info.steps.map((step, i) => (
+                <div key={i} className="flex items-start gap-3">
                   <div
                     className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-white text-sm font-bold"
                     style={{ background: 'var(--primary)' }}
                   >
-                    {step.num}
+                    {i + 1}
                   </div>
                   <div className="flex items-center gap-2 pt-0.5">
                     <p className="text-sm" style={{ color: 'var(--text)' }}>{step.text}</p>
@@ -108,7 +131,7 @@ export function PwaInstallCard() {
             </div>
 
             <button
-              onClick={() => setIosOpen(false)}
+              onClick={() => setModalOpen(false)}
               className="text-sm font-semibold text-center py-2 mt-1"
               style={{ color: 'var(--text-muted)' }}
             >
