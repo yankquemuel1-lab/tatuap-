@@ -9,18 +9,10 @@ export async function POST(request: NextRequest) {
     // 1. Ler o payload da Hotmart
     const body = await request.json()
 
-    // DEBUG TEMPORÁRIO — ver de onde vem o hottok
-    const hottokBody = body?.hottok
-    const hottokQuery = request.nextUrl.searchParams.get('hottok')
-    const hottokHeader = request.headers.get('x-hotmart-hottok')
-    console.log('[Hotmart DEBUG] Chaves no body:', Object.keys(body ?? {}))
-    console.log('[Hotmart DEBUG] hottok no body:', hottokBody ? `${hottokBody.slice(0, 6)}... (len=${hottokBody.length})` : 'AUSENTE')
-    console.log('[Hotmart DEBUG] hottok na URL:', hottokQuery ? `${hottokQuery.slice(0, 6)}... (len=${hottokQuery.length})` : 'AUSENTE')
-    console.log('[Hotmart DEBUG] hottok no header:', hottokHeader ? `${hottokHeader.slice(0, 6)}...` : 'AUSENTE')
-    console.log('[Hotmart DEBUG] hottok esperado:', process.env.HOTMART_HOTTOK ? `${process.env.HOTMART_HOTTOK.slice(0, 6)}... (len=${process.env.HOTMART_HOTTOK.length})` : 'NÃO CONFIGURADO')
-
-    // 2. Validar o hottok — checar body e query param
-    const hottok = hottokBody ?? hottokQuery ?? hottokHeader
+    // 2. Validar o hottok — pode vir no body, query param ou header
+    const hottok = body?.hottok
+      ?? request.nextUrl.searchParams.get('hottok')
+      ?? request.headers.get('x-hotmart-hottok')
     if (hottok !== process.env.HOTMART_HOTTOK) {
       console.error('[Hotmart] Hottok inválido — webhook rejeitado')
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
