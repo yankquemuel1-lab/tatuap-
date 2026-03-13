@@ -41,7 +41,7 @@ export function PwaInstallCard() {
 
         <div className="flex-1 min-w-0">
           <p className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>
-            Salve o app na tela inicial
+            {status === 'ios' ? 'Instale o app no seu iPhone' : 'Salve o app na tela inicial'}
           </p>
           <p className="text-xs mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>
             Acesse com um toque, sem precisar do link
@@ -53,7 +53,7 @@ export function PwaInstallCard() {
           className="px-3 py-2 rounded-xl text-sm font-bold text-white flex-shrink-0"
           style={{ background: 'var(--primary)' }}
         >
-          {status === 'ios' ? 'Como?' : 'Instalar'}
+          {status === 'ios' ? 'Como instalar' : 'Instalar'}
         </button>
       </div>
 
