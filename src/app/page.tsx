@@ -472,8 +472,10 @@ export default function HomePage() {
               background: 'white',
               boxShadow: '0 -8px 48px rgba(0,0,0,0.18)',
               animation: 'slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1) both',
-              maxHeight: '90dvh',
+              maxHeight: '85svh',
               overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              paddingBottom: 'max(24px, env(safe-area-inset-bottom))',
             }}
           >
             {/* Handle + fechar */}
