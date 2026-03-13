@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, Map, BookOpen, Gamepad2, Leaf, Users, Star } from 'lucide-react'
+import { ArrowLeft, Map, BookOpen, Gamepad2, Leaf, Users, Star, Smartphone } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 
 const SUMARIO = [
@@ -162,6 +162,46 @@ export default function ConhecaOAppPage() {
             Uma coletânea viva das principais brincadeiras de roda da cultura popular afro-indígena brasileira. Aprenda, jogue e transmita sabedoria ancestral.
           </p>
         </div>
+
+        {/* Card: Instalar no celular */}
+        <section
+          className="rounded-2xl p-5 flex flex-col gap-4"
+          style={{ background: 'linear-gradient(135deg, #1a1a5e 0%, #3a3a9a 100%)' }}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(255,255,255,0.15)' }}>
+              <Smartphone size={20} className="text-white" />
+            </div>
+            <div>
+              <p className="font-extrabold text-white text-base leading-tight">Instale o app no celular</p>
+              <p className="text-xs text-white/70 mt-0.5">Acesse sempre com um toque, sem precisar do link</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            {/* Android */}
+            <div className="rounded-xl p-3 flex gap-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <span className="text-lg flex-shrink-0">🤖</span>
+              <div>
+                <p className="text-white font-bold text-sm">Android (Chrome)</p>
+                <p className="text-white/75 text-xs leading-relaxed mt-0.5">
+                  Um aviso vai aparecer automaticamente na tela. Toque em <strong className="text-white">Adicionar</strong> e pronto!
+                </p>
+              </div>
+            </div>
+            {/* iOS */}
+            <div className="rounded-xl p-3 flex gap-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <span className="text-lg flex-shrink-0">🍎</span>
+              <div>
+                <p className="text-white font-bold text-sm">iPhone / iPad (Safari)</p>
+                <p className="text-white/75 text-xs leading-relaxed mt-0.5">
+                  Toque em <strong className="text-white">Compartilhar ↑</strong> → role e toque em <strong className="text-white">"Adicionar à Tela de Início"</strong> → confirme.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Como navegar */}
         <section>

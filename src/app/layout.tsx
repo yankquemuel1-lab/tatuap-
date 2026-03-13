@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import { AuthGuard } from "@/components/AuthGuard"
+import { PWAInstallBanner } from "@/components/PWAInstallBanner"
 
 export const metadata: Metadata = {
   title: "Tatuapé — Brincadeiras da Cultura Popular",
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className="antialiased" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
         <div className="min-h-screen max-w-[480px] mx-auto relative">
           <AuthGuard>{children}</AuthGuard>
+          <PWAInstallBanner />
         </div>
       </body>
     </html>
