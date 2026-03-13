@@ -9,6 +9,7 @@ import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass, X, 
 import { BottomNav } from '@/components/BottomNav'
 import { FaleConoscoForm } from '@/components/FaleConoscoForm'
 import { ApeChat } from '@/components/ApeChat'
+import { PwaInstallCard } from '@/components/PwaInstallCard'
 
 const LABEL_CURTO: Record<string, string> = {
   'dancas-musicas': 'Danças de Roda',
@@ -234,6 +235,11 @@ export default function HomePage() {
           </Link>
         ))}
       </div>
+
+      {/* PWA Install Card */}
+      <section className="px-4 pb-2">
+        <PwaInstallCard />
+      </section>
 
       {/* Categories 2x2 grid */}
       <section className="px-4 pb-2">
