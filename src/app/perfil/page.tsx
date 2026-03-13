@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, Camera, KeyRound, Eye, EyeOff, MessageCircleHeart, ChevronDown, ChevronUp } from 'lucide-react'
+import { ArrowLeft, LogOut, Sprout, Star, Trophy, BookOpen, Pencil, Check, X, KeyRound, Eye, EyeOff, MessageCircleHeart, ChevronDown, ChevronUp } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getProgress, defaultProgress, type UserProgress } from '@/lib/progress'
 import { limparFavoritos } from '@/lib/favoritos'
@@ -13,7 +13,6 @@ import { BottomNav } from '@/components/BottomNav'
 interface UserInfo {
   nome: string
   email: string
-  avatarUrl: string | null
 }
 
 const CONQUISTAS_INFO: Record<string, { emoji: string; label: string }> = {
@@ -26,8 +25,6 @@ const CONQUISTAS_INFO: Record<string, { emoji: string; label: string }> = {
 
 export default function PerfilPage() {
   const router = useRouter()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
   const [user, setUser] = useState<UserInfo | null>(null)
   const [carregando, setCarregando] = useState(true)
   const [saindo, setSaindo] = useState(false)
@@ -38,10 +35,6 @@ export default function PerfilPage() {
   const [novoNome, setNovoNome] = useState('')
   const [salvandoNome, setSalvandoNome] = useState(false)
   const [erroNome, setErroNome] = useState('')
-
-  // Upload de foto
-  const [uploadandoFoto, setUploadandoFoto] = useState(false)
-  const [erroFoto, setErroFoto] = useState('')
 
   // Troca de senha
   const [senhaAberta, setSenhaAberta] = useState(false)
@@ -60,7 +53,6 @@ export default function PerfilPage() {
         setUser({
           nome: data.user.user_metadata?.nome || data.user.email?.split('@')[0] || 'Explorador',
           email: data.user.email || '',
-          avatarUrl: data.user.user_metadata?.avatar_url || null,
         })
         setNovoNome(data.user.user_metadata?.nome || '')
       }
@@ -120,41 +112,6 @@ export default function PerfilPage() {
     setSalvandoNome(false)
   }
 
-  async function handleFotoSelecionada(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    setUploadandoFoto(true)
-    setErroFoto('')
-
-    try {
-      const { data: { user: currentUser } } = await supabase.auth.getUser()
-      if (!currentUser) throw new Error('Sem sessão')
-
-      const ext = file.name.split('.').pop()
-      const path = `${currentUser.id}.${ext}`
-
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(path, file, { upsert: true })
-
-      if (uploadError) throw uploadError
-
-      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
-
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: { avatar_url: publicUrl },
-      })
-      if (updateError) throw updateError
-
-      setUser(u => u ? { ...u, avatarUrl: publicUrl } : u)
-    } catch {
-      setErroFoto('Não foi possível enviar a foto. Verifique se o bucket "avatars" está criado no Supabase Storage.')
-    } finally {
-      setUploadandoFoto(false)
-    }
-  }
-
   if (carregando) {
     return (
       <main className="flex items-center justify-center min-h-screen" style={{ background: 'var(--bg)' }}>
@@ -188,34 +145,11 @@ export default function PerfilPage() {
           className="rounded-2xl p-5 flex items-center gap-4"
           style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}
         >
-          {/* Foto com botão de troca */}
-          <div className="relative flex-shrink-0">
+          {/* Avatar fixo do Apé */}
+          <div className="flex-shrink-0">
             <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-lg">
-              {user?.avatarUrl ? (
-                <Image src={user.avatarUrl} alt="Foto de perfil" width={80} height={80} className="w-full h-full object-cover" />
-              ) : (
-                <Image src="/tatu-rosto.jpg" alt="Apé" width={80} height={80} className="w-full h-full object-cover" />
-              )}
+              <Image src="/tatu-rosto.jpg" alt="Apé" width={80} height={80} className="w-full h-full object-cover" />
             </div>
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadandoFoto}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center border-2 border-white shadow"
-              style={{ background: 'var(--primary)' }}
-              title="Trocar foto"
-            >
-              {uploadandoFoto
-                ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                : <Camera size={13} color="white" />
-              }
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFotoSelecionada}
-            />
           </div>
 
           <div className="text-white flex-1 min-w-0">
@@ -251,7 +185,6 @@ export default function PerfilPage() {
                   </div>
                 )}
                 {erroNome && <p className="text-xs text-yellow-200 mb-1">{erroNome}</p>}
-                {erroFoto && <p className="text-xs text-yellow-200 mb-1">{erroFoto}</p>}
                 <p className="text-white/80 text-sm truncate">{user.email}</p>
                 <div className="flex items-center gap-1.5 mt-2">
                   <Sprout size={14} />

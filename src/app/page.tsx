@@ -473,19 +473,16 @@ export default function HomePage() {
           onClick={(e) => { if (e.target === e.currentTarget) setFeedbackModal(false) }}
         >
           <div
-            className="w-full max-w-lg rounded-t-3xl p-6 flex flex-col gap-5"
+            className="w-full max-w-lg rounded-t-3xl flex flex-col"
             style={{
               background: 'white',
               boxShadow: '0 -8px 48px rgba(0,0,0,0.18)',
               animation: 'slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1) both',
-              maxHeight: '85svh',
-              overflowY: 'auto',
-              WebkitOverflowScrolling: 'touch',
-              paddingBottom: 'max(24px, env(safe-area-inset-bottom))',
+              maxHeight: '90dvh',
             }}
           >
             {/* Handle + fechar */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-6 pt-6 pb-4 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <MessageCircleHeart size={20} style={{ color: 'var(--primary)' }} />
                 <h2 className="text-lg font-extrabold" style={{ color: 'var(--text)' }}>Fale com a gente</h2>
@@ -499,7 +496,9 @@ export default function HomePage() {
               </button>
             </div>
 
-            <FaleConoscoForm compact onSuccess={() => setTimeout(() => setFeedbackModal(false), 2500)} />
+            <div className="overflow-y-auto px-6 pb-6" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
+              <FaleConoscoForm compact onSuccess={() => setTimeout(() => setFeedbackModal(false), 2500)} />
+            </div>
           </div>
         </div>
       )}
