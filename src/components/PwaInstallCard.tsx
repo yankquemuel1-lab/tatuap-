@@ -22,9 +22,9 @@ const INSTRUCTIONS = {
     subtitle: 'Siga os passos no Samsung Internet:',
     button: 'Como instalar',
     steps: [
-      { text: 'Toque no ícone de menu (☰) na barra inferior', icon: null },
-      { text: 'Toque em "Adicionar página a"', icon: null },
-      { text: 'Toque em "Tela inicial"', icon: null },
+      { text: 'Toque nos 3 pontos (⋮) no canto superior direito', icon: null },
+      { text: 'Toque em "Adicionar à tela inicial"', icon: null },
+      { text: 'Toque em "Adicionar" para confirmar', icon: null },
     ],
   },
 }
