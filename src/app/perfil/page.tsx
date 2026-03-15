@@ -326,20 +326,32 @@ export default function PerfilPage() {
         {/* Fale Conosco */}
         <Link
           href="/fale-conosco"
-          className="w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+          className="w-full rounded-2xl p-4 flex items-center gap-4"
           style={{
-            background: 'var(--primary-bg)',
-            border: '1.5px solid rgba(226,113,90,0.2)',
-            color: 'var(--primary)',
-            fontFamily: 'inherit',
+            background: 'white',
+            border: '1.5px solid rgba(226,113,90,0.25)',
+            boxShadow: '0 2px 12px rgba(226,113,90,0.10)',
+            textDecoration: 'none',
           }}
         >
-          <MessageCircleHeart size={16} />
-          Fale com a gente
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}
+          >
+            <MessageCircleHeart size={22} color="white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-extrabold text-sm leading-tight" style={{ color: 'var(--text)' }}>
+              Fale com a gente 🌿
+            </p>
+            <p className="text-xs mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>
+              Tem alguma sugestão? Conhece alguma brincadeira para integrarmos na comunidade?
+            </p>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: 'var(--primary)', flexShrink: 0 }}>
+            <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </Link>
-        <p className="text-xs text-center leading-relaxed" style={{ color: 'var(--text-muted)', marginTop: -10 }}>
-          Conhece uma brincadeira que deveria estar aqui? Tem uma sugestão para o app? 👆
-        </p>
 
         {/* Botão sair */}
         {user && (

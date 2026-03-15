@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import { ArrowLeft, Clock, ChevronRight, Mail } from 'lucide-react'
-import { ARTIGOS_CULTURA } from '@/data/cultura'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
 import { supabase } from '@/lib/supabase'
 
@@ -110,69 +109,31 @@ export default function NewsletterPage() {
         </div>
       </section>
 
-      {/* Cultura Popular articles */}
-      <section className="px-4 pt-6 pb-2">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>
-            🎭 Cultura Popular
-          </h2>
-          <span className="text-xs font-semibold" style={{ color: 'var(--primary)' }}>
-            {ARTIGOS_CULTURA.length} artigos
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {ARTIGOS_CULTURA.map(artigo => (
-            <Link
-              key={artigo.slug}
-              href={`/cultura/${artigo.slug}`}
-              className="flex gap-4 items-center p-4 rounded-2xl bg-white"
-              style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'var(--shadow)' }}
-            >
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ background: artigo.corClara }}
-              >
-                {artigo.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-sm leading-tight" style={{ color: 'var(--text)' }}>
-                  {artigo.titulo}
-                </h3>
-                <p className="text-xs mt-0.5 mb-1.5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  {artigo.resumo}
-                </p>
-                <span className="inline-flex items-center gap-1 text-xs" style={{ color: artigo.cor }}>
-                  <Clock size={10} /> {artigo.tempoLeitura} de leitura
-                </span>
-              </div>
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: artigo.corClara, color: artigo.cor }}
-              >
-                <ChevronRight size={16} />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Coming soon editions */}
-      <section className="px-4 pt-6 pb-2">
-        <h2 className="text-xl font-extrabold mb-3" style={{ color: 'var(--text)' }}>
-          📬 Edições da Newsletter
-        </h2>
+      {/* Aviso newsletter em breve */}
+      <section className="px-4 pt-6 pb-4">
         <div
-          className="flex flex-col items-center py-10 px-4 text-center rounded-2xl"
-          style={{ background: 'white', border: '1px solid rgba(0,0,0,0.06)' }}
+          className="rounded-2xl p-6 flex flex-col items-center text-center gap-4"
+          style={{
+            background: 'white',
+            border: '1.5px solid rgba(226,113,90,0.18)',
+            boxShadow: '0 4px 24px rgba(226,113,90,0.10)',
+          }}
         >
-          <span className="text-4xl mb-3">📭</span>
-          <p className="font-bold text-base mb-1" style={{ color: 'var(--text)' }}>
-            Em breve
-          </p>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            As edições da newsletter aparecerão aqui quando publicadas.
-          </p>
+          <div className="text-5xl">📬</div>
+          <div>
+            <h3 className="text-xl font-extrabold mb-2" style={{ color: 'var(--text)' }}>
+              A newsletter do Tatu chegando pra vocês!
+            </h3>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              Em breve o Apé vai te trazer histórias, curiosidades e dicas da cultura popular direto na sua caixa de entrada. 🌿
+            </p>
+          </div>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold"
+            style={{ background: 'var(--primary-bg)', color: 'var(--primary)' }}
+          >
+            🕐 Em breve
+          </div>
         </div>
       </section>
 

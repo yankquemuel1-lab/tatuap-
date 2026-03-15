@@ -5,9 +5,8 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { getProgress } from '@/lib/progress'
 import { DINAMICAS, CATEGORIAS } from '@/data/dinamicas'
-import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass, X, MessageCircleHeart } from 'lucide-react'
+import { ChevronRight, Lightbulb, Megaphone, Heart, Sparkles, Mail, Compass } from 'lucide-react'
 import { BottomNav } from '@/components/BottomNav'
-import { FaleConoscoForm } from '@/components/FaleConoscoForm'
 import { ApeChat } from '@/components/ApeChat'
 import { PwaInstallCard } from '@/components/PwaInstallCard'
 
@@ -36,7 +35,6 @@ export default function HomePage() {
   const [sementes, setSementes] = useState(0)
   const [completos, setCompletos] = useState(0)
   const [popup, setPopup] = useState(false)
-  const [feedbackModal, setFeedbackModal] = useState(false)
   const [chatAberto, setChatAberto] = useState(false)
   const [girando, setGirando] = useState(false)
   const [resultadoSorteio, setResultadoSorteio] = useState<typeof DINAMICAS[0] | null>(null)
@@ -436,72 +434,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Card Fale Conosco */}
-      <section className="px-4 pb-4">
-        <button
-          onClick={() => setFeedbackModal(true)}
-          className="w-full rounded-2xl p-5 flex items-center gap-4 text-left"
-          style={{
-            background: 'white',
-            boxShadow: 'var(--shadow)',
-            border: '1.5px solid rgba(226,113,90,0.15)',
-          }}
-        >
-          <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #f4a261 100%)' }}
-          >
-            <MessageCircleHeart size={26} color="white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-extrabold text-base leading-tight" style={{ color: 'var(--text)' }}>
-              Fale com a gente
-            </p>
-            <p className="text-xs mt-0.5 leading-snug" style={{ color: 'var(--text-muted)' }}>
-              Sugestões, elogios, críticas — o Apé escuta tudo 🌿
-            </p>
-          </div>
-          <ChevronRight size={18} style={{ color: 'var(--primary)', flexShrink: 0 }} />
-        </button>
-      </section>
-
-      {/* Modal Fale Conosco */}
-      {feedbackModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center px-0"
-          style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
-          onClick={(e) => { if (e.target === e.currentTarget) setFeedbackModal(false) }}
-        >
-          <div
-            className="w-full max-w-lg rounded-t-3xl flex flex-col"
-            style={{
-              background: 'white',
-              boxShadow: '0 -8px 48px rgba(0,0,0,0.18)',
-              animation: 'slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1) both',
-              maxHeight: '90dvh',
-            }}
-          >
-            {/* Handle + fechar */}
-            <div className="flex items-center justify-between px-6 pt-6 pb-4 flex-shrink-0">
-              <div className="flex items-center gap-2">
-                <MessageCircleHeart size={20} style={{ color: 'var(--primary)' }} />
-                <h2 className="text-lg font-extrabold" style={{ color: 'var(--text)' }}>Fale com a gente</h2>
-              </div>
-              <button
-                onClick={() => setFeedbackModal(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full"
-                style={{ background: 'rgba(0,0,0,0.06)', color: '#666' }}
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <div className="overflow-y-auto px-6 pb-6" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
-              <FaleConoscoForm compact onSuccess={() => setTimeout(() => setFeedbackModal(false), 2500)} />
-            </div>
-          </div>
-        </div>
-      )}
 
       <BottomNav />
     </main>

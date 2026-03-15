@@ -40,9 +40,6 @@ export default function FaleConoscoPage() {
             <p className="font-extrabold text-lg leading-tight">
               Sua mensagem<br />importa pra roda!
             </p>
-            <p className="text-white/80 text-xs mt-1">
-              Sugestão, elogio, crítica — o Apé escuta tudo.
-            </p>
           </div>
         </div>
 

@@ -27,13 +27,14 @@ const ICONES_DINAMICA: Record<string, string> = {
 const VIDEOS: Record<string, string> = {
   'samba-de-roda': 'vt_8ZSJ4ktc',
   'coco-de-roda': 'iv1SbMCqEBk',
-  'tambor-de-crioula': '1Z4gAigXLts',
+  'tambor-de-crioula': 'oYToZy9dGdI',
   'maculele': 'QmZfUYHh_0o',
   'danca-do-tore': 'ejN9eYpyIRk',
   'bate-coxa': '9GmJPNIZ2dE',
   'ciranda': 'Zq2S6qadAKQ',
   'jongo': 'N8cmQHKsNC0',
   'siriri': 'JKz_klurecQ',
+  'obwisana': 'rAuezeYSzY0',
 }
 
 const CAT_GRAD: Record<string, string> = {
